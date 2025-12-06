@@ -1,0 +1,54 @@
+<?php
+
+use CodeIgniter\Router\RouteCollection;
+
+/**
+ * @var RouteCollection $routes
+ */
+$routes->get('/', 'Home::index');
+
+// User routes
+$routes->get('/users', 'UserController::index');
+$routes->get('/users/create', 'UserController::create');
+$routes->post('/users/store', 'UserController::store');
+$routes->get('/users/(:num)', 'UserController::show/$1');
+$routes->get('/users/(:num)/edit', 'UserController::edit/$1');
+$routes->post('/users/(:num)/update', 'UserController::update/$1');
+$routes->get('/users/(:num)/delete', 'UserController::delete/$1');
+
+// Warga routes
+$routes->get('/wargas', 'WargaController::index');
+
+// Jenis Layanan routes
+$routes->get('/jenis-layanan', 'JenisLayananController::index');
+
+// Permohonan routes
+$routes->get('/permohonan', 'PermohonanController::index');
+
+// Pengaduan routes
+$routes->get('/pengaduan', 'PengaduanController::index');
+$routes->get('/pengaduan/create', 'PengaduanController::create');
+$routes->post('/pengaduan/store', 'PengaduanController::store');
+$routes->get('/pengaduan/(:num)', 'PengaduanController::show/$1');
+$routes->get('/pengaduan/(:num)/edit', 'PengaduanController::edit/$1');
+$routes->post('/pengaduan/(:num)/update', 'PengaduanController::update/$1');
+$routes->post('/pengaduan/update-status', 'PengaduanController::updateStatus');
+
+// Authentication routes
+$routes->get('/register', 'AuthController::register');
+$routes->post('/register', 'AuthController::store');
+$routes->get('/login', 'AuthController::login');
+$routes->post('/login', 'AuthController::authenticate');
+$routes->get('/admin/login', 'AuthController::adminLogin');
+$routes->post('/admin/login', 'AuthController::authenticateAdmin');
+$routes->get('/logout', 'AuthController::logout');
+
+// Dashboard routes (Admin/Petugas only)
+$routes->get('/dashboard', 'DashboardController::index');
+$routes->get('/dashboard/warga', 'DashboardController::manageWarga');
+$routes->get('/dashboard/warga/create', 'DashboardController::createWarga');
+$routes->post('/dashboard/warga/store', 'DashboardController::storeWarga');
+$routes->get('/dashboard/warga/(:num)', 'DashboardController::showWarga/$1');
+$routes->get('/dashboard/warga/(:num)/edit', 'DashboardController::editWarga/$1');
+$routes->post('/dashboard/warga/(:num)/update', 'DashboardController::updateWarga/$1');
+$routes->get('/dashboard/warga/(:num)/delete', 'DashboardController::deleteWarga/$1');
