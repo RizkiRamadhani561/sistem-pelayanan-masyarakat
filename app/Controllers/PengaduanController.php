@@ -8,6 +8,25 @@ use App\Models\WargaModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
+/**
+ * Controller untuk mengelola sistem pengaduan masyarakat
+ *
+ * Controller ini menangani semua aspek pengaduan masyarakat mulai dari:
+ * - Pembuatan pengaduan baru oleh warga
+ * - Peninjauan dan penanganan pengaduan oleh petugas/admin
+ * - Update status pengaduan secara real-time
+ * - Upload lampiran file untuk pendukung pengaduan
+ * - Tracking progress pengaduan
+ * - Notifikasi otomatis kepada stakeholders
+ *
+ * Fitur utama:
+ * - CRUD lengkap untuk pengaduan
+ * - Multi-level akses (warga, petugas, admin)
+ * - File upload dengan validasi keamanan
+ * - Real-time status updates
+ * - Integration dengan sistem notifikasi
+ * - Audit trail untuk tracking perubahan
+ */
 class PengaduanController extends BaseController
 {
     protected $pengaduanModel;

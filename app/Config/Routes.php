@@ -58,3 +58,21 @@ $routes->get('/dashboard/warga/(:num)', 'DashboardController::showWarga/$1');
 $routes->get('/dashboard/warga/(:num)/edit', 'DashboardController::editWarga/$1');
 $routes->post('/dashboard/warga/(:num)/update', 'DashboardController::updateWarga/$1');
 $routes->get('/dashboard/warga/(:num)/delete', 'DashboardController::deleteWarga/$1');
+
+// Notification routes
+$routes->get('/notifikasi', 'NotifikasiController::userNotifications');
+$routes->post('/notifikasi/mark-read', 'NotifikasiController::markAsRead');
+$routes->get('/api/notifikasi/latest', 'NotifikasiController::getLatestNotifications');
+
+// Admin notification routes
+$routes->get('/admin/notifikasi', 'NotifikasiController::index');
+$routes->get('/admin/notifikasi/create', 'NotifikasiController::create');
+$routes->post('/admin/notifikasi/store', 'NotifikasiController::store');
+$routes->get('/admin/notifikasi/(:num)/delete', 'NotifikasiController::delete/$1');
+
+// Reporting routes
+$routes->get('/admin/laporan', 'LaporanController::index');
+$routes->get('/admin/laporan/pengaduan', 'LaporanController::laporanPengaduan');
+$routes->get('/admin/laporan/permohonan', 'LaporanController::laporanPermohonan');
+$routes->get('/admin/laporan/pengguna', 'LaporanController::laporanPengguna');
+$routes->get('/admin/laporan/export/(:segment)/(:segment)', 'LaporanController::export/$1/$2');
