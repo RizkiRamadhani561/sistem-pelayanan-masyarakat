@@ -51,48 +51,73 @@
     </style>
 </head>
 <body class="bg-light">
-    <!-- Navbar -->
+    <!-- Minimalistic Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="bi bi-building-fill text-primary me-2"></i>
-                Kembangan Raya
+        <div class="container-fluid px-4">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-primary d-flex align-items-center" href="/">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                    <i class="bi bi-building-fill text-primary fs-5"></i>
+                </div>
+                <span class="d-none d-sm-inline">Kembangan Raya</span>
+                <span class="d-inline d-sm-none">KR</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Navigation Content -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Main Navigation -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/">Beranda</a>
+                        <a class="nav-link px-3 py-2" href="/">
+                            <i class="bi bi-house-door me-1 d-lg-none"></i>
+                            <span>Beranda</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/berita">Berita</a>
+                        <a class="nav-link px-3 py-2" href="/layanan">
+                            <i class="bi bi-file-earmark-text me-1 d-lg-none"></i>
+                            <span>Layanan</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pengaduan">Pengaduan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/layanan">Layanan</a>
+                        <a class="nav-link px-3 py-2" href="/pengaduan">
+                            <i class="bi bi-exclamation-triangle me-1 d-lg-none"></i>
+                            <span>Pengaduan</span>
+                        </a>
                     </li>
                 </ul>
 
+                <!-- User Menu -->
                 <ul class="navbar-nav">
                     <?php if (session()->has('user')): ?>
                         <!-- Admin/Petugas Menu -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle me-1"></i>
-                                <?= session('user')['nama'] ?> (<?= session('user')['role'] ?>)
+                            <a class="nav-link dropdown-toggle px-3 py-2 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-person-circle text-primary"></i>
+                                </div>
+                                <div class="d-none d-lg-block">
+                                    <div class="fw-semibold small"><?= session('user')['nama'] ?></div>
+                                    <div class="text-muted small opacity-75"><?= ucfirst(session('user')['role']) ?></div>
+                                </div>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/dashboard">
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                <li><a class="dropdown-item py-2" href="/dashboard">
                                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                                 </a></li>
+                                <li><a class="dropdown-item py-2" href="/admin/notifikasi">
+                                    <i class="bi bi-bell me-2"></i>Notifikasi
+                                </a></li>
+                                <li><a class="dropdown-item py-2" href="/admin/laporan">
+                                    <i class="bi bi-graph-up me-2"></i>Laporan
+                                </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/logout">
+                                <li><a class="dropdown-item py-2 text-danger" href="/logout">
                                     <i class="bi bi-box-arrow-right me-2"></i>Logout
                                 </a></li>
                             </ul>
@@ -100,19 +125,27 @@
                     <?php elseif (session()->has('warga')): ?>
                         <!-- Warga Menu -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="wargaDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle me-1"></i>
-                                <?= session('warga')['nama_lengkap'] ?> (Warga)
+                            <a class="nav-link dropdown-toggle px-3 py-2 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-person-circle text-success"></i>
+                                </div>
+                                <div class="d-none d-lg-block">
+                                    <div class="fw-semibold small"><?= session('warga')['nama_lengkap'] ?></div>
+                                    <div class="text-muted small opacity-75">Warga</div>
+                                </div>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/pengaduan">
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                <li><a class="dropdown-item py-2" href="/pengaduan">
                                     <i class="bi bi-exclamation-triangle me-2"></i>Pengaduan Saya
                                 </a></li>
-                                <li><a class="dropdown-item" href="/permohonan">
+                                <li><a class="dropdown-item py-2" href="/permohonan">
                                     <i class="bi bi-file-earmark-text me-2"></i>Permohonan Saya
                                 </a></li>
+                                <li><a class="dropdown-item py-2" href="/notifikasi">
+                                    <i class="bi bi-bell me-2"></i>Notifikasi
+                                </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/logout">
+                                <li><a class="dropdown-item py-2 text-danger" href="/logout">
                                     <i class="bi bi-box-arrow-right me-2"></i>Logout
                                 </a></li>
                             </ul>
@@ -120,24 +153,29 @@
                     <?php else: ?>
                         <!-- Guest Menu -->
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                            <a class="btn btn-outline-primary btn-sm me-2" href="/login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                <span class="d-none d-sm-inline">Login</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/register">
-                                <i class="bi bi-person-plus me-1"></i>Daftar
+                            <a class="btn btn-primary btn-sm" href="/register">
+                                <i class="bi bi-person-plus me-1"></i>
+                                <span class="d-none d-sm-inline">Daftar</span>
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-shield me-1"></i>Admin
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/admin/login">
-                                    <i class="bi bi-shield-lock me-2"></i>Login Admin/Petugas
-                                </a></li>
-                            </ul>
+                        <li class="nav-item ms-3">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-shield me-1"></i>
+                                    <span class="d-none d-sm-inline">Admin</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                    <li><a class="dropdown-item py-2" href="/admin/login">
+                                        <i class="bi bi-shield-lock me-2"></i>Login Admin/Petugas
+                                    </a></li>
+                                </ul>
+                            </div>
                         </li>
                     <?php endif; ?>
                 </ul>
