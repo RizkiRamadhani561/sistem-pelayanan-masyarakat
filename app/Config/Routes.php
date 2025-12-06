@@ -20,6 +20,12 @@ $routes->get('/users/(:num)/delete', 'UserController::delete/$1');
 $routes->get('/wargas', 'WargaController::index');
 
 // Jenis Layanan routes
+$routes->get('/layanan', 'JenisLayananController::index');
+$routes->get('/layanan/(:num)', 'JenisLayananController::show/$1');
+$routes->get('/layanan/(:num)/ajukan', 'JenisLayananController::ajukan/$1');
+$routes->post('/layanan/(:num)/ajukan', 'JenisLayananController::storePermohonan/$1');
+
+// Legacy route for backward compatibility
 $routes->get('/jenis-layanan', 'JenisLayananController::index');
 
 // Permohonan routes

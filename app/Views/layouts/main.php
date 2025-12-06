@@ -15,13 +15,11 @@
     <link href="/assets/bootstrap/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <!-- Font Awesome for Social Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/enhanced.css" rel="stylesheet">
-    <!-- Modern UI Design System -->
-    <link href="/css/modern-ui.css" rel="stylesheet">
+    <!-- Enhanced CSS for better UI -->
+    <link href="/css/enhanced.css" rel="stylesheet">
 
     <style>
         .navbar-brand {
@@ -53,77 +51,60 @@
     </style>
 </head>
 <body class="bg-light">
-    <!-- Modern Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top navbar-scroll">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <!-- Logo/Brand -->
             <a class="navbar-brand" href="/">
-                <div class="d-flex align-items-center">
-                    <div class="bg-primary rounded-circle p-2 me-3">
-                        <i class="bi bi-building text-white fs-4"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bold text-primary mb-0 fs-5">Kembangan Raya</div>
-                        <small class="text-muted d-block" style="font-size: 0.7rem; margin-top: -2px;">Pelayanan Masyarakat</small>
-                    </div>
-                </div>
+                <i class="bi bi-building text-primary me-2"></i>
+                Kembangan Raya
             </a>
 
-            <!-- Mobile Toggle Button -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Navigation Menu -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold px-3 py-2" href="/">Beranda</a>
+                        <a class="nav-link active" href="/">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold px-3 py-2" href="/berita">Berita</a>
+                        <a class="nav-link" href="/berita">Berita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold px-3 py-2" href="/pengaduan">Pengaduan</a>
+                        <a class="nav-link" href="/pengaduan">Pengaduan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold px-3 py-2" href="/layanan">Layanan</a>
+                        <a class="nav-link" href="/layanan">Layanan</a>
                     </li>
                 </ul>
 
-                <!-- User Menu & Social Links -->
-                <div class="d-flex align-items-center">
+                <ul class="navbar-nav">
                     <?php if (session()->has('user')): ?>
                         <!-- Admin/Petugas Menu -->
-                        <div class="dropdown me-3">
-                            <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-2"></i>
-                                <span class="d-none d-lg-inline"><?= session('user')['nama'] ?></span>
-                                <small class="text-muted ms-1">(<?= session('user')['role'] ?>)</small>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>
+                                <?= session('user')['nama'] ?> (<?= session('user')['role'] ?>)
+                            </a>
+                            <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/dashboard">
                                     <i class="bi bi-speedometer2 me-2"></i>Dashboard
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="/logout">
+                                <li><a class="dropdown-item" href="/logout">
                                     <i class="bi bi-box-arrow-right me-2"></i>Logout
                                 </a></li>
                             </ul>
-                        </div>
+                        </li>
                     <?php elseif (session()->has('warga')): ?>
                         <!-- Warga Menu -->
-                        <div class="dropdown me-3">
-                            <button class="btn btn-outline-success dropdown-toggle d-flex align-items-center"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-2"></i>
-                                <span class="d-none d-lg-inline"><?= session('warga')['nama_lengkap'] ?></span>
-                                <small class="text-muted ms-1">(Warga)</small>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="wargaDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>
+                                <?= session('warga')['nama_lengkap'] ?> (Warga)
+                            </a>
+                            <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/pengaduan">
                                     <i class="bi bi-exclamation-triangle me-2"></i>Pengaduan Saya
                                 </a></li>
@@ -131,58 +112,38 @@
                                     <i class="bi bi-file-earmark-text me-2"></i>Permohonan Saya
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="/logout">
+                                <li><a class="dropdown-item" href="/logout">
                                     <i class="bi bi-box-arrow-right me-2"></i>Logout
                                 </a></li>
                             </ul>
-                        </div>
+                        </li>
                     <?php else: ?>
                         <!-- Guest Menu -->
-                        <div class="d-flex gap-2 me-3">
-                            <a href="/login" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>
-                                <span class="d-none d-lg-inline">Login</span>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Login
                             </a>
-                            <a href="/register" class="btn btn-primary btn-sm">
-                                <i class="bi bi-person-plus me-1"></i>
-                                <span class="d-none d-lg-inline">Daftar</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">
+                                <i class="bi bi-person-plus me-1"></i>Daftar
                             </a>
-                        </div>
-
-                        <!-- Admin Login Dropdown -->
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-shield me-1"></i>
-                                <span class="d-none d-lg-inline">Admin</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-shield me-1"></i>Admin
+                            </a>
+                            <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/admin/login">
                                     <i class="bi bi-shield-lock me-2"></i>Login Admin/Petugas
                                 </a></li>
                             </ul>
-                        </div>
+                        </li>
                     <?php endif; ?>
-
-                    <!-- Social Media Links -->
-                    <div class="d-flex align-items-center ms-3 border-start ps-3">
-                        <a href="#" class="text-decoration-none me-2" title="Facebook">
-                            <i class="fab fa-facebook-square text-primary fs-5"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none me-2" title="Instagram">
-                            <i class="fab fa-instagram text-danger fs-5"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none" title="YouTube">
-                            <i class="fab fa-youtube text-danger fs-5"></i>
-                        </a>
-                    </div>
-                </div>
+                </ul>
             </div>
         </div>
     </nav>
-
-    <!-- Spacer for fixed navbar -->
-    <div style="height: 80px;"></div>
 
     <!-- Main Content -->
     <main>
