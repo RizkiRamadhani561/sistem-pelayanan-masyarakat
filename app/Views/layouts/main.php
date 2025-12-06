@@ -55,7 +55,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="bi bi-building text-primary me-2"></i>
+                <i class="bi bi-building-fill text-primary me-2"></i>
                 Kembangan Raya
             </a>
 
