@@ -130,9 +130,13 @@ class PengaduanController extends BaseController
             return redirect()->to('/pengaduan')->with('error', 'Anda tidak memiliki akses untuk mengedit pengaduan');
         }
 
+        // Get warga data
+        $warga = $this->wargaModel->find($pengaduan['warga_id']);
+
         $data = [
             'title' => 'Update Status Pengaduan - ' . $pengaduan['judul'],
             'pengaduan' => $pengaduan,
+            'warga' => $warga,
             'petugas' => $this->userModel->where('role', 'petugas')->findAll(),
         ];
 
