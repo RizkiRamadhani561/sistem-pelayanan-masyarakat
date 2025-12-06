@@ -11,14 +11,16 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- Bootstrap 5 CSS (Local) -->
     <link href="/assets/bootstrap/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/enhanced.css" rel="stylesheet">
-    <!-- Enhanced CSS for better UI -->
     <link href="/css/enhanced.css" rel="stylesheet">
 
     <style>
