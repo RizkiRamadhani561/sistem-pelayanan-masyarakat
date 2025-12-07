@@ -93,6 +93,16 @@ class AuthController extends BaseController
      */
     public function store()
     {
+        // Log untuk debugging - CEK APAKAH METHOD INI DIPANGGIL
+        log_message('debug', '=== AUTH REGISTRATION STORE METHOD CALLED ===');
+        log_message('debug', 'AuthController::store() dipanggil pada: ' . date('Y-m-d H:i:s'));
+
+        // Log semua request data
+        log_message('debug', 'REQUEST METHOD: ' . $this->request->getMethod());
+        log_message('debug', 'REQUEST URI: ' . $this->request->getUri());
+        log_message('debug', 'ALL POST DATA: ' . json_encode($this->request->getPost()));
+        log_message('debug', 'ALL GET DATA: ' . json_encode($this->request->getGet()));
+
         // Aturan validasi untuk setiap field form
         $rules = [
             // NIK: wajib diisi, harus numerik, tepat 16 digit, unik di database

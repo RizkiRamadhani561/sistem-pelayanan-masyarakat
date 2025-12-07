@@ -236,7 +236,11 @@
                             </div>
                         </div>
 
-                        <!-- Password Fields (for future use) -->
+                        <!-- Hidden Password Fields (required for validation but not used) -->
+                        <input type="hidden" name="password" value="password123">
+                        <input type="hidden" name="confirm_password" value="password123">
+
+                        <!-- Info Alert -->
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle me-2"></i>
                             <strong>Catatan:</strong> Sistem ini menggunakan NIK sebagai autentikasi utama. Password tidak diperlukan untuk saat ini.
