@@ -174,20 +174,34 @@ class LaporanController extends BaseController
      */
     private function getDashboardStats()
     {
-        $bulan_ini = date('Y-m');
-        $tahun_ini = date('Y');
+        try {
+            $bulan_ini = date('Y-m');
 
-        return [
-            'total_warga' => $this->wargaModel->countAll(),
-            'total_pengaduan' => $this->pengaduanModel->countAll(),
-            'total_perMohonan' => $this->permohonanModel->countAll(),
-            'pengaduan_bulan_ini' => $this->pengaduanModel->where('DATE_FORMAT(created_at, "%Y-%m")', $bulan_ini)->countAllResults(),
-            'permohonan_bulan_ini' => $this->permohonanModel->where('DATE_FORMAT(created_at, "%Y-%m")', $bulan_ini)->countAllResults(),
-            'pengaduan_selesai' => $this->pengaduanModel->where('status', 'selesai')->countAllResults(),
-            'permohonan_selesai' => $this->permohonanModel->where('status', 'selesai')->countAllResults(),
-            'rata_waktu_pengaduan' => $this->hitungRataWaktuProses('pengaduan'),
-            'rata_waktu_perMohonan' => $this->hitungRataWaktuProses('permohonan'),
-        ];
+            return [
+                'total_warga' => $this->wargaModel->countAll(),
+                'total_pengaduan' => $this->pengaduanModel->countAll(),
+                'total_perMohonan' => $this->permohonanModel->countAll(),
+                'pengaduan_bulan_ini' => $this->pengaduanModel->where('DATE_FORMAT(created_at, "%Y-%m")', $bulan_ini)->countAllResults(),
+                'permohonan_bulan_ini' => $this->permohonanModel->where('DATE_FORMAT(created_at, "%Y-%m")', $bulan_ini)->countAllResults(),
+                'pengaduan_selesai' => $this->pengaduanModel->where('status', 'selesai')->countAllResults(),
+                'permohonan_selesai' => $this->permohonanModel->where('status', 'selesai')->countAllResults(),
+                'rata_waktu_pengaduan' => $this->hitungRataWaktuProses('pengaduan'),
+                'rata_waktu_perMohonan' => $this->hitungRataWaktuProses('permohonan'),
+            ];
+        } catch (\Exception $e) {
+            log_message('error', 'Error in getDashboardStats: ' . $e->getMessage());
+            return [
+                'total_warga' => 0,
+                'total_pengaduan' => 0,
+                'total_perMohonan' => 0,
+                'pengaduan_bulan_ini' => 0,
+                'permohonan_bulan_ini' => 0,
+                'pengaduan_selesai' => 0,
+                'permohonan_selesai' => 0,
+                'rata_waktu_pengaduan' => 0,
+                'rata_waktu_perMohonan' => 0,
+            ];
+        }
     }
 
     /**
