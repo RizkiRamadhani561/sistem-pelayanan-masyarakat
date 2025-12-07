@@ -54,13 +54,18 @@ class LaporanController extends BaseController
             return redirect()->to('/')->with('error', 'Akses ditolak');
         }
 
-        $data = [
-            'title' => 'Dashboard Laporan & Analitik',
-            'stats' => $this->getDashboardStats(),
-            'charts' => $this->getChartData(),
-        ];
+        try {
+            $data = [
+                'title' => 'Dashboard Laporan & Analitik',
+                'stats' => $this->getDashboardStats(),
+                'charts' => $this->getChartData(),
+            ];
 
-        return view('admin/laporan/index', $data);
+            return view('admin/laporan/index', $data);
+        } catch (\Exception $e) {
+            log_message('error', 'Error in LaporanController::index: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat laporan: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -333,17 +338,23 @@ class LaporanController extends BaseController
      */
     private function getLayananPopuler()
     {
-        $db = \Config\Database::connect();
-        $query = $db->query("
-            SELECT jl.nama_pelayanan, COUNT(p.id_permohonan) as jumlah
-            FROM jenis_pelayanan jl
-            LEFT JOIN permohonan p ON jl.id_jenis = p.jenis_id
-            GROUP BY jl.id_jenis, jl.nama_pelayanan
-            ORDER BY jumlah DESC
-            LIMIT 10
-        ");
+        try {
+            $db = \Config\Database::connect();
+            $query = $db->query("
+                SELECT jl.nama_pelayanan, COUNT(p.id_permohonan) as jumlah
+                FROM jenis_pelayanan jl
+                LEFT JOIN permohonan p ON jl.id_jenis = p.jenis_id
+                GROUP BY jl.id_jenis, jl.nama_pelayanan
+                ORDER BY jumlah DESC
+                LIMIT 10
+            ");
 
-        return $query->getResultArray();
+            return $query->getResultArray();
+        } catch (\Exception $e) {
+            // Return empty array if query fails
+            log_message('error', 'Error in getLayananPopuler: ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -422,13 +433,22 @@ class LaporanController extends BaseController
      */
     private function getDemografiWarga()
     {
-        $db = \Config\Database::connect();
+        try {
+            $db = \Config\Database::connect();
 
-        return [
-            'jenis_kelamin' => $db->query("SELECT jenis_kelamin, COUNT(*) as jumlah FROM warga GROUP BY jenis_kelamin")->getResultArray(),
-            'kecamatan' => $db->query("SELECT kecamatan, COUNT(*) as jumlah FROM warga GROUP BY kecamatan ORDER BY jumlah DESC LIMIT 10")->getResultArray(),
-            'kelompok_umur' => $this->getKelompokUmur(),
-        ];
+            return [
+                'jenis_kelamin' => $db->query("SELECT jenis_kelamin, COUNT(*) as jumlah FROM warga GROUP BY jenis_kelamin")->getResultArray(),
+                'kecamatan' => $db->query("SELECT kecamatan, COUNT(*) as jumlah FROM warga GROUP BY kecamatan ORDER BY jumlah DESC LIMIT 10")->getResultArray(),
+                'kelompok_umur' => $this->getKelompokUmur(),
+            ];
+        } catch (\Exception $e) {
+            log_message('error', 'Error in getDemografiWarga: ' . $e->getMessage());
+            return [
+                'jenis_kelamin' => [],
+                'kecamatan' => [],
+                'kelompok_umur' => [],
+            ];
+        }
     }
 
     /**
