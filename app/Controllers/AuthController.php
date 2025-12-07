@@ -368,7 +368,7 @@ class AuthController extends BaseController
         // Password untuk validasi (tidak disimpan)
         $password = 'password123';
 
-        // Simulasi validasi seperti di store() method
+        // Simulasi validasi seperti di store() method - tapi langsung validasi data
         $rules = [
             'nik' => 'required|numeric|exact_length[16]|is_unique[warga.nik,id_warga,{id_warga}]',
             'nama_lengkap' => 'required|min_length[3]|max_length[150]',
@@ -384,12 +384,16 @@ class AuthController extends BaseController
             'email' => 'permit_empty|valid_email|is_unique[warga.email,id_warga,{id_warga}]',
         ];
 
-        // Set data untuk validasi
+        // Set data untuk validasi dengan password
         $validationData = array_merge($testData, ['password' => $password, 'confirm_password' => $password]);
 
-        if (!$this->validate($rules)) {
-            log_message('error', 'Validasi gagal: ' . json_encode($this->validator->getErrors()));
-            return "❌ VALIDATION FAILED: " . json_encode($this->validator->getErrors());
+        // Validasi manual tanpa menggunakan $this->validate()
+        $validation = \Config\Services::validation();
+        $validation->setRules($rules);
+
+        if (!$validation->run($validationData)) {
+            log_message('error', 'Validasi gagal: ' . json_encode($validation->getErrors()));
+            return "❌ VALIDATION FAILED: " . json_encode($validation->getErrors());
         }
 
         log_message('debug', 'Validasi berhasil, menyimpan data: ' . json_encode($testData));
