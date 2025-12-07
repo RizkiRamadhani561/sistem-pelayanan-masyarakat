@@ -185,6 +185,107 @@
 		::-webkit-scrollbar-thumb:hover {
 			background: #555;
 		}
+
+		/* Guest Account Dropdown */
+		.user-account-btn {
+			background: rgba(255, 255, 255, 0.9);
+			border: 2px solid rgba(0, 123, 255, 0.3);
+			color: #007bff;
+			font-weight: 600;
+			padding: 0.5rem 1rem;
+			border-radius: 25px;
+			transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+		}
+
+		.user-account-btn:hover {
+			background: rgba(0, 123, 255, 0.1);
+			border-color: rgba(0, 123, 255, 0.5);
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+			color: #007bff;
+		}
+
+		.user-account-btn:focus {
+			box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+		}
+
+		.guest-dropdown {
+			background: rgba(255, 255, 255, 0.98);
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			border-radius: 12px;
+			box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+			backdrop-filter: blur(10px);
+			margin-top: 0.5rem;
+			padding: 0.5rem 0;
+			min-width: 220px;
+		}
+
+		.guest-dropdown .dropdown-item {
+			color: #495057;
+			padding: 0.75rem 1.5rem;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			border-radius: 6px;
+			margin: 0.1rem 0.5rem;
+		}
+
+		.guest-dropdown .dropdown-item:hover {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: #ffffff;
+			transform: translateX(4px);
+		}
+
+		.guest-dropdown .dropdown-item i {
+			width: 20px;
+			margin-right: 0.75rem;
+			text-align: center;
+		}
+
+		.guest-dropdown .dropdown-divider {
+			margin: 0.5rem 0;
+			border-color: rgba(0,0,0,0.1);
+		}
+
+		/* Mobile responsive for guest dropdown */
+		@media (max-width: 991.98px) {
+			.user-account-btn {
+				padding: 0.4rem 0.8rem;
+				font-size: 0.9rem;
+			}
+
+			.guest-dropdown {
+				min-width: 200px;
+				margin-top: 0.25rem;
+			}
+
+			.guest-dropdown .dropdown-item {
+				padding: 0.6rem 1rem;
+				font-size: 0.9rem;
+			}
+
+			.guest-dropdown .dropdown-item i {
+				width: 18px;
+				margin-right: 0.5rem;
+				font-size: 0.9rem;
+			}
+		}
+
+		@media (max-width: 576px) {
+			.user-account-btn {
+				padding: 0.35rem 0.7rem;
+				font-size: 0.85rem;
+			}
+
+			.guest-dropdown {
+				min-width: 180px;
+			}
+
+			.guest-dropdown .dropdown-item {
+				padding: 0.5rem 0.8rem;
+				font-size: 0.85rem;
+			}
+		}
 	</style>
 </head>
 <body class="bg-light">
@@ -300,22 +401,25 @@
                         </div>
 
                     <?php else: ?>
-                        <!-- Guest Authentication -->
-                        <div class="guest-actions">
-                            <a href="/login" class="btn-login">
-                                <i class="bi bi-box-arrow-in-right d-lg-none me-1"></i>
-                                <span class="d-none d-lg-inline">Masuk</span>
+                        <!-- Guest Authentication Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle user-account-btn" type="button" data-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-2"></i>
+                                <span class="d-none d-lg-inline">Akun</span>
                                 <span class="d-lg-none">Login</span>
-                            </a>
-                            <a href="/register" class="btn-register">
-                                <i class="bi bi-person-plus d-lg-none me-1"></i>
-                                <span class="d-none d-lg-inline">Daftar</span>
-                                <span class="d-lg-none">Register</span>
-                            </a>
-                            <a href="/admin/login" class="btn-admin">
-                                <i class="bi bi-shield-lock d-lg-none me-1"></i>
-                                <span class="d-none d-lg-inline">Admin</span>
-                            </a>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right guest-dropdown">
+                                <a class="dropdown-item" href="/login">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Masuk sebagai Warga
+                                </a>
+                                <a class="dropdown-item" href="/register">
+                                    <i class="bi bi-person-plus me-2"></i>Daftar Akun Baru
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/admin/login">
+                                    <i class="bi bi-shield-lock me-2"></i>Masuk sebagai Admin
+                                </a>
+                            </div>
                         </div>
                     <?php endif; ?>
                 </div>
