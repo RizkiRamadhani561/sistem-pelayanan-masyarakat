@@ -22,435 +22,310 @@
 	<link href="/css/enhanced.css" rel="stylesheet">
 
 	<style>
-		/* Modern Navbar Styles - Enhanced Visibility & UX */
-		.navbar {
-			box-shadow: 0 2px 20px rgba(0,0,0,0.08) !important;
-			border-bottom: 2px solid #f8f9fa;
-			transition: all 0.3s ease;
+		/* Modern Navbar Styles */
+		.modern-navbar {
+			backdrop-filter: blur(10px);
+			background: rgba(255, 255, 255, 0.95) !important;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+			transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		}
 
-		.navbar-brand {
-			transition: all 0.3s ease;
+		.modern-navbar.scrolled {
+			background: rgba(255, 255, 255, 0.98) !important;
+			box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 		}
 
-		.navbar-brand:hover {
-			transform: scale(1.02);
-		}
-
-		.brand-icon {
-			background: linear-gradient(135deg, #667eea 0%, #764ba2);
-			border-radius: 12px;
-			padding: 12px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-		}
-
-		.brand-title {
-			line-height: 1.2;
-			font-size: 0.85rem !important;
-		}
-
-		.brand-subtitle {
-			font-size: 0.65rem;
-			margin-top: -2px;
-		}
-
-		/* Navigation Links */
-		.nav-link {
-			font-weight: 500 !important;
-			color: #495057 !important;
+		.modern-nav-link {
 			position: relative;
-			transition: all 0.3s ease;
-			border-radius: 25px !important;
+			font-weight: 500;
+			color: #495057 !important;
+			padding: 0.75rem 1rem !important;
+			transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			border-radius: 8px;
 			margin: 0 2px;
 		}
 
-		.nav-link:hover {
-			background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(102, 126, 234, 0.1));
+		.modern-nav-link:hover {
 			color: #007bff !important;
+			background: rgba(0, 123, 255, 0.1);
 			transform: translateY(-1px);
-			box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
 		}
 
-		.nav-link i {
-			opacity: 0.8;
-		}
-
-		.nav-link:hover i {
-			opacity: 1;
-			transform: scale(1.1);
-		}
-
-		.nav-indicator {
+		.modern-nav-link::after {
+			content: '';
 			position: absolute;
-			bottom: -2px;
+			bottom: 0;
 			left: 50%;
 			width: 0;
 			height: 2px;
 			background: linear-gradient(90deg, #007bff, #6610f2);
-			border-radius: 1px;
-			transition: all 0.3s ease;
+			transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 			transform: translateX(-50%);
 		}
 
-		.nav-link:hover .nav-indicator {
-			width: 70%;
+		.modern-nav-link:hover::after {
+			width: 80%;
 		}
 
-		/* User Menu */
-		.user-menu-link {
-			border: 1px solid #e9ecef;
-			background: rgba(255, 255, 255, 0.8);
-			transition: all 0.3s ease;
+		.modern-user-btn {
+			padding: 0.5rem 1rem !important;
+			border-radius: 50px !important;
+			transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		}
 
-		.user-menu-link:hover {
-			background: rgba(0, 123, 255, 0.05) !important;
-			border-color: #007bff;
+		.modern-user-btn:hover {
+			background: rgba(0, 123, 255, 0.1) !important;
 			transform: translateY(-1px);
-			box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
 		}
 
-		.user-avatar {
-			width: 36px;
-			height: 36px;
+		.user-icon {
+			width: 32px;
+			height: 32px;
 			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background: linear-gradient(135deg, #667eea, #764ba2);
-			color: white;
-			font-size: 1.1rem;
+			object-fit: cover;
+			border: 2px solid #e9ecef;
 		}
 
-		.user-name {
-			font-size: 0.8rem;
-			line-height: 1.2;
+		.user-info strong {
+			font-size: 0.875rem;
+			color: #495057;
 		}
 
-		.user-role {
-			font-size: 0.65rem;
+		.user-info small {
+			font-size: 0.75rem;
 			margin-top: -2px;
 		}
 
-		/* Dropdown Menu */
-		.dropdown-menu {
-			border: none;
-			box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-			border-radius: 12px;
-			padding: 8px 0;
-			margin-top: 8px !important;
-		}
-
-		.dropdown-item {
-			padding: 12px 20px;
+		/* Enhanced card hover effects */
+		.card-hover:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 			transition: all 0.3s ease;
-			border-radius: 6px;
-			margin: 2px 8px;
 		}
 
-		.dropdown-item:hover {
-			background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(102, 126, 234, 0.1));
-			color: #007bff;
-			transform: translateX(4px);
+		/* Lazy loading animations */
+		.lazy-img {
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+		.lazy-img.loaded {
+			opacity: 1;
 		}
 
-		.dropdown-header {
-			padding: 12px 20px 8px;
-			font-weight: 600;
-			color: #6c757d;
-			border-bottom: 1px solid #e9ecef;
-			margin-bottom: 8px;
+		/* Status badges */
+		.status-badge {
+			font-size: 0.8em;
 		}
 
-		/* Search Bar */
-		.input-group .form-control {
-			border-right: none;
-			border-radius: 25px 0 0 25px;
+		/* General animations */
+		.fade-in {
+			animation: fadeIn 0.5s ease-in;
+		}
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(20px); }
+			to { transform: translateY(0); opacity: 1; }
 		}
 
-		.input-group .btn {
-			border-left: none;
-			border-radius: 0 25px 25px 0;
-			background: linear-gradient(135deg, #6c757d, #495057);
-			border-color: #6c757d;
-		}
-
-		.input-group .btn:hover {
-			background: linear-gradient(135deg, #5a6268, #343a40);
-			transform: translateY(-1px);
-		}
-
-		/* Buttons */
+		/* Button hover effects */
 		.btn {
-			border-radius: 25px !important;
-			font-weight: 500;
-			transition: all 0.3s ease;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+			transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		}
 
 		.btn:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 		}
 
-		.btn-outline-primary:hover {
-			background: linear-gradient(135deg, #007bff, #6610f2) !important;
-			border-color: #007bff;
-			color: white !important;
-		}
-
-		.btn-primary {
-			background: linear-gradient(135deg, #007bff, #6610f2);
-			border: none;
-		}
-
-		.btn-primary:hover {
-			background: linear-gradient(135deg, #0056b3, #4c0fe2);
-		}
-
-		/* Mobile Enhancements */
-		@media (max-width: 991.98px) {
-			.navbar-collapse {
-				background: white;
-				border-radius: 12px;
-				margin-top: 16px;
-				padding: 20px;
-				box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-				border: 1px solid #e9ecef;
-			}
-
-			.nav-link {
-				padding: 12px 16px !important;
-				margin: 4px 0;
-				text-align: center;
-				justify-content: center;
-			}
-
-			.user-info {
-				display: none !important;
-			}
-
-			.mobile-search {
-				padding: 16px;
-				background: #f8f9fa;
-				border-top: 1px solid #e9ecef;
-			}
-
-			.navbar-toggler {
-				border: 1px solid #dee2e6;
-				border-radius: 8px;
-			}
-
-			.navbar-toggler:focus {
-				box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-			}
-		}
-
-		/* Accessibility */
-		.nav-link:focus,
-		.btn:focus,
-		.dropdown-item:focus {
-			outline: 2px solid #007bff;
-			outline-offset: 2px;
-		}
-
-		/* Loading States */
-		.navbar-loading {
-			opacity: 0.7;
-			pointer-events: none;
-		}
-
-		/* Smooth animations */
-		* {
-			transition: all 0.3s ease;
-		}
-
-		/* Enhanced visibility */
-		.navbar {
-			z-index: 1030;
-		}
-
-		/* Sticky navbar enhancement */
-		.navbar.sticky-top {
-			top: 0;
-			z-index: 1030;
-		}
-
-		/* Focus states */
+		/* Form enhancements */
 		.form-control:focus {
 			border-color: #007bff;
 			box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 			transform: translateY(-1px);
 		}
 
-		/* Custom scrollbar for dropdown */
-		.dropdown-menu::-webkit-scrollbar {
-			width: 6px;
+		/* Responsive enhancements */
+		@media (max-width: 991.98px) {
+			.modern-navbar {
+				background: rgba(255, 255, 255, 1) !important;
+			}
+
+			.modern-nav-link {
+				padding: 0.5rem 1rem !important;
+				margin: 2px 0;
+			}
+
+			.navbar-collapse {
+				background: rgba(255, 255, 255, 0.95);
+				border-radius: 8px;
+				margin-top: 1rem;
+				padding: 1rem;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+			}
 		}
 
-		.dropdown-menu::-webkit-scrollbar-thumb {
-			background: #ccc;
-			border-radius: 3px;
+		/* Smooth scrolling */
+		html {
+			scroll-behavior: smooth;
 		}
 
-		.dropdown-menu::-webkit-scrollbar-thumb:hover {
-			background: #999;
+		/* Custom scrollbar */
+		::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		::-webkit-scrollbar-track {
+			background: #f1f1f1;
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: #888;
+			border-radius: 4px;
+		}
+
+		::-webkit-scrollbar-thumb:hover {
+			background: #555;
 		}
 	</style>
 </head>
 <body class="bg-light">
-    <!-- Modern Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <!-- Modern Professional Navbar -->
+    <nav class="navbar navbar-expand-lg modern-navbar">
         <div class="container-fluid px-4">
-            <!-- Brand -->
-            <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="/">
-                <div class="brand-icon me-3">
-                    <i class="fas fa-building text-primary" style="font-size: 2rem;"></i>
-                </div>
-                <div class="brand-text">
-                    <div class="brand-title h6 mb-0 fw-bold text-primary">PELAYANAN MASYARAKAT</div>
-                    <div class="brand-subtitle small text-muted">Kembangan Raya</div>
-                </div>
+
+            <!-- Brand Logo -->
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-building-fill"></i>
+                <span>Kembangan Raya</span>
             </a>
 
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Main Menu -->
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <!-- Navigation Links -->
-                <ul class="navbar-nav me-auto">
+            <!-- Navigation Menu (Desktop) -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link px-3 py-2 mx-1 rounded-pill position-relative" href="/">
-                            <i class="fas fa-home me-2"></i>Beranda
-                            <span class="nav-indicator"></span>
+                        <a class="nav-link active" href="/">
+                            <i class="bi bi-house-door d-lg-none me-2"></i>Beranda
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 py-2 mx-1 rounded-pill position-relative" href="/layanan">
-                            <i class="fas fa-concierge-bell me-2"></i>Layanan
-                            <span class="nav-indicator"></span>
+                        <a class="nav-link" href="/layanan">
+                            <i class="bi bi-file-earmark-text d-lg-none me-2"></i>Layanan
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3 py-2 mx-1 rounded-pill position-relative" href="/pengaduan">
-                            <i class="fas fa-exclamation-triangle me-2"></i>Pengaduan
-                            <span class="nav-indicator"></span>
+                        <a class="nav-link" href="/pengaduan">
+                            <i class="bi bi-exclamation-triangle d-lg-none me-2"></i>Pengaduan
                         </a>
                     </li>
-                    <?php if (session()->has('user') || session()->has('warga')): ?>
-                    <li class="nav-item">
-                        <a class="nav-link px-3 py-2 mx-1 rounded-pill position-relative" href="/berita">
-                            <i class="fas fa-newspaper me-2"></i>Berita
-                            <span class="nav-indicator"></span>
-                        </a>
-                    </li>
-                    <?php endif; ?>
                 </ul>
 
-                <!-- Search Bar (Desktop) -->
-                <form class="d-none d-lg-flex me-3" style="width: 250px;">
-                    <div class="input-group">
-                        <input type="search" class="form-control form-control-sm border-end-0" placeholder="Cari informasi..." aria-label="Search">
-                        <button class="btn btn-outline-secondary btn-sm border-start-0" type="submit">
-                            <i class="fas fa-search"></i>
+                <!-- Search Bar (Desktop - Centered) -->
+                <div class="navbar-search-container d-none d-lg-block">
+                    <form class="search-form" action="/search" method="GET">
+                        <input type="text" class="search-input" name="q" placeholder="Cari layanan, pengaduan, berita..." autocomplete="off">
+                        <button type="submit" class="search-btn">
+                            <i class="bi bi-search"></i>
                         </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
 
-                <!-- User Section -->
-                <ul class="navbar-nav">
+                <!-- Right Side - User Profile / Auth Buttons -->
+                <div class="navbar-profile ms-auto">
                     <?php if (session()->has('user')): ?>
-                        <!-- Admin/Petugas Menu -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle user-menu-link px-3 py-2 rounded-pill" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <div class="user-avatar me-2">
-                                        <i class="fas fa-user-shield text-primary"></i>
-                                    </div>
-                                    <div class="user-info d-none d-lg-block">
-                                        <div class="user-name small fw-bold text-dark"><?= session('user')['nama'] ?></div>
-                                        <div class="user-role small text-muted"><?= ucfirst(session('user')['role']) ?></div>
-                                    </div>
+                        <!-- Admin/Petugas Profile -->
+                        <div class="dropdown">
+                            <a class="user-profile-btn dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzNiAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTgiIGN5PSIxOCIgcj0iMTgiIGZpbGw9IiNFNUU3RUIiLz4KPGNpcmNsZSBjeD0iMTgiIGN5PSI5IiByPSI2IiBmaWxsPSIjOUI5QkE0Ii8+CjxwYXRoIGQ9Ik0wIDI0aDM2djEySDB2LTEyWiIgZmlsbD0iIzlCOUI5NCIvPgo8L3N2Zz4K" alt="Avatar" class="user-avatar">
+                                <div class="user-info d-none d-lg-block">
+                                    <strong><?= session('user')['nama'] ?></strong>
+                                    <small>Administrator</small>
                                 </div>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="adminDropdown">
-                                <li class="dropdown-header bg-light">
-                                    <strong>Menu Admin</strong>
-                                </li>
-                                <li><a class="dropdown-item py-2" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
-                                <li><a class="dropdown-item py-2" href="/admin/notifikasi"><i class="fas fa-bell me-2"></i>Notifikasi</a></li>
-                                <li><a class="dropdown-item py-2" href="/admin/laporan"><i class="fas fa-chart-bar me-2"></i>Laporan</a></li>
-                                <li><a class="dropdown-item py-2" href="/admin/warga"><i class="fas fa-users me-2"></i>Kelola Warga</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger py-2" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="/dashboard">
+                                    <i class="bi bi-speedometer2"></i> Dashboard Admin
+                                </a>
+                                <a class="dropdown-item" href="/admin/notifikasi">
+                                    <i class="bi bi-bell"></i> Manajemen Notifikasi
+                                </a>
+                                <a class="dropdown-item" href="/admin/laporan">
+                                    <i class="bi bi-graph-up"></i> Laporan & Analitik
+                                </a>
+                                <a class="dropdown-item" href="/admin/warga">
+                                    <i class="bi bi-people"></i> Kelola Warga
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="/logout">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </div>
+                        </div>
 
                     <?php elseif (session()->has('warga')): ?>
-                        <!-- Warga Menu -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle user-menu-link px-3 py-2 rounded-pill" href="#" id="wargaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <div class="user-avatar me-2">
-                                        <i class="fas fa-user text-success"></i>
-                                    </div>
-                                    <div class="user-info d-none d-lg-block">
-                                        <div class="user-name small fw-bold text-dark"><?= session('warga')['nama_lengkap'] ?></div>
-                                        <div class="user-role small text-muted">Warga</div>
-                                    </div>
+                        <!-- Warga Profile -->
+                        <div class="dropdown">
+                            <a class="user-profile-btn dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzNiAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTgiIGN5PSIxOCIgcj0iMTgiIGZpbGw9IiNGM0Y0RjYiLz4KPGNpcmNsZSBjeD0iMTgiIGN5PSI5IiByPSI2IiBmaWxsPSIjQ0RDQ0RBIi8+CjxwYXRoIGQ9Ik0wIDI0aDM2djEySDB2LTEyWiIgZmlsbD0iIzlCOUI5NCIvPgo8L3N2Zz4K" alt="Avatar" class="user-avatar">
+                                <div class="user-info d-none d-lg-block">
+                                    <strong><?= session('warga')['nama_lengkap'] ?></strong>
+                                    <small>Warga</small>
                                 </div>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="wargaDropdown">
-                                <li class="dropdown-header bg-light">
-                                    <strong>Akun Saya</strong>
-                                </li>
-                                <li><a class="dropdown-item py-2" href="/pengaduan"><i class="fas fa-exclamation-triangle me-2"></i>Pengaduan Saya</a></li>
-                                <li><a class="dropdown-item py-2" href="/permohonan"><i class="fas fa-file-alt me-2"></i>Permohonan Saya</a></li>
-                                <li><a class="dropdown-item py-2" href="/notifikasi"><i class="fas fa-bell me-2"></i>Notifikasi</a></li>
-                                <li><a class="dropdown-item py-2" href="/berita"><i class="fas fa-newspaper me-2"></i>Berita</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger py-2" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="/pengaduan">
+                                    <i class="bi bi-exclamation-triangle"></i> Pengaduan Saya
+                                </a>
+                                <a class="dropdown-item" href="/permohonan">
+                                    <i class="bi bi-file-earmark-text"></i> Permohonan Saya
+                                </a>
+                                <a class="dropdown-item" href="/notifikasi">
+                                    <i class="bi bi-bell"></i> Notifikasi
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/profile">
+                                    <i class="bi bi-person-gear"></i> Pengaturan Profil
+                                </a>
+                                <a class="dropdown-item text-danger" href="/logout">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </div>
+                        </div>
 
                     <?php else: ?>
-                        <!-- Guest Menu -->
-                        <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary btn-sm px-3 py-2 rounded-pill" href="/login">
-                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                        <!-- Guest Authentication -->
+                        <div class="guest-actions">
+                            <a href="/login" class="btn-login">
+                                <i class="bi bi-box-arrow-in-right d-lg-none me-1"></i>
+                                <span class="d-none d-lg-inline">Masuk</span>
+                                <span class="d-lg-none">Login</span>
                             </a>
-                        </li>
-                        <li class="nav-item me-2">
-                            <a class="btn btn-primary btn-sm px-3 py-2 rounded-pill" href="/register">
-                                <i class="fas fa-user-plus me-1"></i>Daftar
+                            <a href="/register" class="btn-register">
+                                <i class="bi bi-person-plus d-lg-none me-1"></i>
+                                <span class="d-none d-lg-inline">Daftar</span>
+                                <span class="d-lg-none">Register</span>
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-pill" href="/admin/login">
-                                <i class="fas fa-shield-alt me-1"></i>Admin
+                            <a href="/admin/login" class="btn-admin">
+                                <i class="bi bi-shield-lock d-lg-none me-1"></i>
+                                <span class="d-none d-lg-inline">Admin</span>
                             </a>
-                        </li>
+                        </div>
                     <?php endif; ?>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Mobile Search Bar -->
-        <div class="d-lg-none bg-light border-top py-2 px-3">
-            <form class="w-100">
-                <div class="input-group">
-                    <input type="search" class="form-control form-control-sm" placeholder="Cari informasi..." aria-label="Mobile search">
-                    <button class="btn btn-primary btn-sm" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
                 </div>
-            </form>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="d-lg-none w-100 mt-3 px-3">
+                <form class="search-form" action="/search" method="GET">
+                    <input type="text" class="search-input" name="q" placeholder="Cari layanan, pengaduan, berita..." autocomplete="off">
+                    <button type="submit" class="search-btn">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </nav>
 
@@ -481,8 +356,9 @@
 		</div>
 	</footer>
 
-	<!-- Bootstrap 5 JS (Local) -->
-	<script src="/assets/bootstrap/bootstrap.bundle.min.js"></script>
+	<!-- Bootstrap 4 JS (Local) -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/assets/bootstrap4/bootstrap.bundle.min.js"></script>
 
     <!-- Animation System JS -->
     <script src="/js/animations.js"></script>
@@ -532,14 +408,38 @@
             // Add animated form inputs
             $('.form-control').addClass('form-control-animated');
 
-            // Navbar scroll effect
+            // Navbar scroll effect for modern navbar
             $(window).scroll(function() {
                 if ($(this).scrollTop() > 50) {
-                    $('.navigation-clean-search').addClass('scrolled');
+                    $('.modern-navbar').addClass('scrolled');
                 } else {
-                    $('.navigation-clean-search').removeClass('scrolled');
+                    $('.modern-navbar').removeClass('scrolled');
                 }
             });
+
+            // Search form enhancement
+            $('.search-input').on('focus', function() {
+                $(this).parent().addClass('focused');
+            }).on('blur', function() {
+                $(this).parent().removeClass('focused');
+            });
+
+            // Mobile menu enhancement
+            $('.navbar-toggler').on('click', function() {
+                $('.modern-navbar').toggleClass('menu-open');
+            });
+
+            // Dropdown hover effects for desktop
+            if ($(window).width() > 991) {
+                $('.dropdown').hover(
+                    function() {
+                        $(this).find('.dropdown-menu').stop(true, true).slideDown(200);
+                    },
+                    function() {
+                        $(this).find('.dropdown-menu').stop(true, true).slideUp(200);
+                    }
+                );
+            }
 
             // Smooth scrolling for anchor links
             $('a[href^="#"]').on('click', function(event) {
