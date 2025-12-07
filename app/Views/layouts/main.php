@@ -11,8 +11,8 @@
 	<link rel="icon" type="image/x-icon" href="/favicon.ico">
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
-	<!-- Bootstrap 4 CSS (CDN) -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+	<!-- Bootstrap 4 CSS (Local) -->
+	<link rel="stylesheet" href="/assets/bootstrap4/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
 	<!-- Bootstrap Icons -->
@@ -284,9 +284,9 @@
 		</div>
 	</footer>
 
-	<!-- Bootstrap 4 JS (CDN) -->
+	<!-- Bootstrap 4 JS (Local) -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+	<script src="/assets/bootstrap4/bootstrap.bundle.min.js"></script>
 
     <!-- Animation System JS -->
     <script src="/js/animations.js"></script>
