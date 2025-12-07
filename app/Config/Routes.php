@@ -29,6 +29,7 @@ $routes->get('/wargas/(:num)', 'WargaController::show/$1');  // Detail warga
 $routes->get('/wargas/(:num)/edit', 'WargaController::edit/$1'); // Form edit warga
 $routes->post('/wargas/(:num)/update', 'WargaController::update/$1'); // Update warga
 $routes->get('/wargas/(:num)/delete', 'WargaController::delete/$1'); // Hapus warga
+$routes->get('/wargas/test-add', 'WargaController::testAdd'); // Test method untuk menambah warga
 
 // Jenis Layanan routes
 $routes->get('/layanan', 'JenisLayananController::index');

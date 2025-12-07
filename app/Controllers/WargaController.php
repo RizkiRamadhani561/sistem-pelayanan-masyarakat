@@ -79,8 +79,15 @@ class WargaController extends BaseController
      */
     public function store()
     {
-        // Log untuk debugging
-        log_message('debug', 'WargaController::store() dipanggil');
+        // Log untuk debugging - CEK APAKAH METHOD INI DIPANGGIL
+        log_message('debug', '=== WARGA STORE METHOD CALLED ===');
+        log_message('debug', 'WargaController::store() dipanggil pada: ' . date('Y-m-d H:i:s'));
+
+        // Log semua request data
+        log_message('debug', 'REQUEST METHOD: ' . $this->request->getMethod());
+        log_message('debug', 'REQUEST URI: ' . $this->request->getUri());
+        log_message('debug', 'ALL POST DATA: ' . json_encode($this->request->getPost()));
+        log_message('debug', 'ALL GET DATA: ' . json_encode($this->request->getGet()));
 
         // Aturan validasi untuk data warga
         $validationRules = [
@@ -473,6 +480,57 @@ class WargaController extends BaseController
         } catch (\Exception $e) {
             log_message('error', 'Exception dalam tambahWarga: ' . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * TEST METHOD - Menambahkan warga baru untuk testing
+     * Akses: /wargas/test-add
+     *
+     * @return string Response hasil test
+     */
+    public function testAdd()
+    {
+        log_message('debug', '=== TEST ADD WARGA METHOD CALLED ===');
+
+        // Data warga untuk testing
+        $testData = [
+            'nik' => '1234567890123456', // Pastikan unik
+            'nama_lengkap' => 'Test Warga Sistem',
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Jakarta',
+            'tanggal_lahir' => '1990-01-01',
+            'alamat' => 'Jl. Test No. 123, RT 01/RW 02',
+            'rt_rw' => '01/02',
+            'kecamatan' => 'Test Kecamatan',
+            'kab_kota' => 'Jakarta Pusat',
+            'provinsi' => 'DKI Jakarta',
+            'no_hp' => '081234567890',
+            'email' => 'test@example.com',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        log_message('debug', 'Test data yang akan disimpan: ' . json_encode($testData));
+
+        try {
+            // Coba simpan menggunakan method store yang sama
+            $result = $this->wargaModel->insert($testData);
+
+            log_message('debug', 'Test insert result: ' . ($result ? 'SUCCESS ID: ' . $result : 'FAILED'));
+
+            if ($result) {
+                return "SUCCESS: Warga berhasil ditambahkan dengan ID: " . $result . "\n" .
+                       "Data tersimpan di database. Silakan cek tabel warga.";
+            } else {
+                return "FAILED: Tidak dapat menyimpan data warga ke database.\n" .
+                       "Periksa koneksi database dan struktur tabel.";
+            }
+
+        } catch (\Exception $e) {
+            log_message('error', 'Exception dalam testAdd: ' . $e->getMessage());
+            return "ERROR: " . $e->getMessage() . "\n" .
+                   "Stack trace: " . $e->getTraceAsString();
         }
     }
 
