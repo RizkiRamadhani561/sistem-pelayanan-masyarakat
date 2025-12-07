@@ -94,3 +94,8 @@ $routes->get('/admin/laporan/pengaduan', 'LaporanController::laporanPengaduan');
 $routes->get('/admin/laporan/permohonan', 'LaporanController::laporanPermohonan');
 $routes->get('/admin/laporan/pengguna', 'LaporanController::laporanPengguna');
 $routes->get('/admin/laporan/export/(:segment)/(:segment)', 'LaporanController::export/$1/$2');
+
+// Search routes
+$routes->get('/search', 'SearchController::index');
+$routes->get('/api/search', 'SearchController::apiSearch');
+$routes->get('/search/advanced', 'SearchController::advanced');
