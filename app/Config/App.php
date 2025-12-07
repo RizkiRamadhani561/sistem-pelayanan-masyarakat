@@ -8,23 +8,23 @@ class App extends BaseConfig
 {
     /**
      * --------------------------------------------------------------------------
-     * Base Site URL
+     * URL Dasar Situs
      * --------------------------------------------------------------------------
      *
-     * URL to your CodeIgniter root. Typically, this will be your base URL,
-     * WITH a trailing slash:
+     * URL ke root CodeIgniter Anda. Biasanya, ini akan menjadi URL dasar Anda,
+     * DENGAN garis miring di akhir:
      *
-     * E.g., http://example.com/
+     * Contoh: http://example.com/
      */
     public string $baseURL = 'http://localhost:8081/';
 
     /**
-     * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
-     * If you want to accept multiple Hostnames, set this.
+     * Hostname yang Diizinkan di URL Situs selain hostname di baseURL.
+     * Jika Anda ingin menerima beberapa Hostname, atur ini.
      *
-     * E.g.,
-     * When your site URL ($baseURL) is 'http://example.com/', and your site
-     * also accepts 'http://media.example.com/' and 'http://accounts.example.com/':
+     * Contoh:
+     * Ketika URL situs Anda ($baseURL) adalah 'http://example.com/', dan situs Anda
+     * juga menerima 'http://media.example.com/' dan 'http://accounts.example.com/':
      *     ['media.example.com', 'accounts.example.com']
      *
      * @var list<string>
@@ -33,90 +33,90 @@ class App extends BaseConfig
 
     /**
      * --------------------------------------------------------------------------
-     * Index File
+     * File Index
      * --------------------------------------------------------------------------
      *
-     * Typically, this will be your `index.php` file, unless you've renamed it to
-     * something else. If you have configured your web server to remove this file
-     * from your site URIs, set this variable to an empty string.
+     * Biasanya, ini akan menjadi file `index.php` Anda, kecuali Anda telah mengubah namanya
+     * menjadi yang lain. Jika Anda telah mengonfigurasi server web untuk menghapus file ini
+     * dari URI situs Anda, atur variabel ini ke string kosong.
      */
     public string $indexPage = 'index.php';
 
     /**
      * --------------------------------------------------------------------------
-     * URI PROTOCOL
+     * PROTOKOL URI
      * --------------------------------------------------------------------------
      *
-     * This item determines which server global should be used to retrieve the
-     * URI string. The default setting of 'REQUEST_URI' works for most servers.
-     * If your links do not seem to work, try one of the other delicious flavors:
+     * Item ini menentukan global server mana yang harus digunakan untuk mengambil
+     * string URI. Pengaturan default 'REQUEST_URI' berfungsi untuk sebagian besar server.
+     * Jika tautan Anda tidak berfungsi, coba salah satu rasa lezat lainnya:
      *
-     *  'REQUEST_URI': Uses $_SERVER['REQUEST_URI']
-     * 'QUERY_STRING': Uses $_SERVER['QUERY_STRING']
-     *    'PATH_INFO': Uses $_SERVER['PATH_INFO']
+     *  'REQUEST_URI': Menggunakan $_SERVER['REQUEST_URI']
+     * 'QUERY_STRING': Menggunakan $_SERVER['QUERY_STRING']
+     *    'PATH_INFO': Menggunakan $_SERVER['PATH_INFO']
      *
-     * WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
+     * PERINGATAN: Jika Anda mengatur ini ke 'PATH_INFO', URI akan selalu di-decode URL!
      */
     public string $uriProtocol = 'REQUEST_URI';
 
     /*
     |--------------------------------------------------------------------------
-    | Allowed URL Characters
+    | Karakter URL yang Diizinkan
     |--------------------------------------------------------------------------
     |
-    | This lets you specify which characters are permitted within your URLs.
-    | When someone tries to submit a URL with disallowed characters they will
-    | get a warning message.
+    | Ini memungkinkan Anda menentukan karakter mana yang diizinkan dalam URL Anda.
+    | Ketika seseorang mencoba mengirimkan URL dengan karakter yang tidak diizinkan,
+    | mereka akan mendapat pesan peringatan.
     |
-    | As a security measure you are STRONGLY encouraged to restrict URLs to
-    | as few characters as possible.
+    | Sebagai langkah keamanan, Anda SANGAT disarankan untuk membatasi URL
+    | ke sesedikit mungkin karakter.
     |
-    | By default, only these are allowed: `a-z 0-9~%.:_-`
+    | Secara default, hanya karakter ini yang diizinkan: `a-z 0-9~%.:_-`
     |
-    | Set an empty string to allow all characters -- but only if you are insane.
+    | Atur string kosong untuk mengizinkan semua karakter -- tetapi hanya jika Anda gila.
     |
-    | The configured value is actually a regular expression character group
-    | and it will be used as: '/\A[<permittedURIChars>]+\z/iu'
+    | Nilai yang dikonfigurasi sebenarnya adalah grup karakter ekspresi reguler
+    | dan akan digunakan sebagai: '/\A[<permittedURIChars>]+\z/iu'
     |
-    | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
+    | JANGAN UBAH INI KECUALI ANDA SEPENUHNYA MEMAHAMI KONSEKUENSINYA!!
     |
     */
     public string $permittedURIChars = 'a-z 0-9~%.:_\-';
 
     /**
      * --------------------------------------------------------------------------
-     * Default Locale
+     * Locale Default
      * --------------------------------------------------------------------------
      *
-     * The Locale roughly represents the language and location that your visitor
-     * is viewing the site from. It affects the language strings and other
-     * strings (like currency markers, numbers, etc), that your program
-     * should run under for this request.
+     * Locale secara kasar mewakili bahasa dan lokasi dari mana pengunjung Anda
+     * melihat situs. Ini memengaruhi string bahasa dan string lainnya
+     * (seperti penanda mata uang, angka, dll), yang program Anda
+     * harus jalankan untuk permintaan ini.
      */
     public string $defaultLocale = 'en';
 
     /**
      * --------------------------------------------------------------------------
-     * Negotiate Locale
+     * Negosiasi Locale
      * --------------------------------------------------------------------------
      *
-     * If true, the current Request object will automatically determine the
-     * language to use based on the value of the Accept-Language header.
+     * Jika true, objek Request saat ini akan secara otomatis menentukan
+     * bahasa yang akan digunakan berdasarkan nilai header Accept-Language.
      *
-     * If false, no automatic detection will be performed.
+     * Jika false, tidak ada deteksi otomatis yang akan dilakukan.
      */
     public bool $negotiateLocale = false;
 
     /**
      * --------------------------------------------------------------------------
-     * Supported Locales
+     * Locale yang Didukung
      * --------------------------------------------------------------------------
      *
-     * If $negotiateLocale is true, this array lists the locales supported
-     * by the application in descending order of priority. If no match is
-     * found, the first locale will be used.
+     * Jika $negotiateLocale adalah true, array ini mencantumkan locale yang didukung
+     * oleh aplikasi dalam urutan prioritas menurun. Jika tidak ada kecocokan
+     * yang ditemukan, locale pertama akan digunakan.
      *
-     * IncomingRequest::setLocale() also uses this list.
+     * IncomingRequest::setLocale() juga menggunakan daftar ini.
      *
      * @var list<string>
      */
@@ -124,55 +124,55 @@ class App extends BaseConfig
 
     /**
      * --------------------------------------------------------------------------
-     * Application Timezone
+     * Zona Waktu Aplikasi
      * --------------------------------------------------------------------------
      *
-     * The default timezone that will be used in your application to display
-     * dates with the date helper, and can be retrieved through app_timezone()
+     * Zona waktu default yang akan digunakan dalam aplikasi Anda untuk menampilkan
+     * tanggal dengan helper tanggal, dan dapat diambil melalui app_timezone()
      *
-     * @see https://www.php.net/manual/en/timezones.php for list of timezones
-     *      supported by PHP.
+     * @see https://www.php.net/manual/en/timezones.php untuk daftar zona waktu
+     *      yang didukung oleh PHP.
      */
     public string $appTimezone = 'UTC';
 
     /**
      * --------------------------------------------------------------------------
-     * Default Character Set
+     * Set Karakter Default
      * --------------------------------------------------------------------------
      *
-     * This determines which character set is used by default in various methods
-     * that require a character set to be provided.
+     * Ini menentukan set karakter mana yang digunakan secara default dalam berbagai metode
+     * yang memerlukan set karakter yang disediakan.
      *
-     * @see http://php.net/htmlspecialchars for a list of supported charsets.
+     * @see http://php.net/htmlspecialchars untuk daftar charset yang didukung.
      */
     public string $charset = 'UTF-8';
 
     /**
      * --------------------------------------------------------------------------
-     * Force Global Secure Requests
+     * Paksa Permintaan Aman Global
      * --------------------------------------------------------------------------
      *
-     * If true, this will force every request made to this application to be
-     * made via a secure connection (HTTPS). If the incoming request is not
-     * secure, the user will be redirected to a secure version of the page
-     * and the HTTP Strict Transport Security (HSTS) header will be set.
+     * Jika true, ini akan memaksa setiap permintaan yang dibuat ke aplikasi ini untuk
+     * dibuat melalui koneksi aman (HTTPS). Jika permintaan yang masuk tidak
+     * aman, pengguna akan diarahkan ke versi aman halaman
+     * dan header HTTP Strict Transport Security (HSTS) akan diatur.
      */
     public bool $forceGlobalSecureRequests = false;
 
     /**
      * --------------------------------------------------------------------------
-     * Reverse Proxy IPs
+     * IP Reverse Proxy
      * --------------------------------------------------------------------------
      *
-     * If your server is behind a reverse proxy, you must whitelist the proxy
-     * IP addresses from which CodeIgniter should trust headers such as
-     * X-Forwarded-For or Client-IP in order to properly identify
-     * the visitor's IP address.
+     * Jika server Anda berada di belakang reverse proxy, Anda harus melakukan whitelist
+     * alamat IP proxy dari mana CodeIgniter harus mempercayai header seperti
+     * X-Forwarded-For atau Client-IP untuk mengidentifikasi dengan benar
+     * alamat IP pengunjung.
      *
-     * You need to set a proxy IP address or IP address with subnets and
-     * the HTTP header for the client IP address.
+     * Anda perlu mengatur alamat IP proxy atau alamat IP dengan subnet dan
+     * header HTTP untuk alamat IP klien.
      *
-     * Here are some examples:
+     * Berikut adalah beberapa contoh:
      *     [
      *         '10.0.1.200'     => 'X-Forwarded-For',
      *         '192.168.5.0/24' => 'X-Real-IP',
@@ -184,16 +184,16 @@ class App extends BaseConfig
 
     /**
      * --------------------------------------------------------------------------
-     * Content Security Policy
+     * Kebijakan Keamanan Konten
      * --------------------------------------------------------------------------
      *
-     * Enables the Response's Content Secure Policy to restrict the sources that
-     * can be used for images, scripts, CSS files, audio, video, etc. If enabled,
-     * the Response object will populate default values for the policy from the
-     * `ContentSecurityPolicy.php` file. Controllers can always add to those
-     * restrictions at run time.
+     * Mengaktifkan Kebijakan Keamanan Konten Response untuk membatasi sumber yang
+     * dapat digunakan untuk gambar, skrip, file CSS, audio, video, dll. Jika diaktifkan,
+     * objek Response akan mengisi nilai default kebijakan dari file
+     * `ContentSecurityPolicy.php`. Controller selalu dapat menambahkan batasan tersebut
+     * pada waktu proses.
      *
-     * For a better understanding of CSP, see these documents:
+     * Untuk pemahaman yang lebih baik tentang CSP, lihat dokumen berikut:
      *
      * @see http://www.html5rocks.com/en/tutorials/security/content-security-policy/
      * @see http://www.w3.org/TR/CSP/
