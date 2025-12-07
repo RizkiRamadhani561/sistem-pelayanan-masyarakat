@@ -16,8 +16,19 @@ $routes->get('/users/(:num)/edit', 'UserController::edit/$1');
 $routes->post('/users/(:num)/update', 'UserController::update/$1');
 $routes->get('/users/(:num)/delete', 'UserController::delete/$1');
 
-// Warga routes
-$routes->get('/wargas', 'WargaController::index');
+/**
+ * ROUTES UNTUK WARGA CONTROLLER
+ * Mengatur semua endpoint untuk operasi CRUD warga
+ */
+
+// Warga routes - Operasi lengkap CRUD
+$routes->get('/wargas', 'WargaController::index');           // List semua warga
+$routes->get('/wargas/create', 'WargaController::create');   // Form tambah warga
+$routes->post('/wargas/store', 'WargaController::store');    // Simpan warga baru
+$routes->get('/wargas/(:num)', 'WargaController::show/$1');  // Detail warga
+$routes->get('/wargas/(:num)/edit', 'WargaController::edit/$1'); // Form edit warga
+$routes->post('/wargas/(:num)/update', 'WargaController::update/$1'); // Update warga
+$routes->get('/wargas/(:num)/delete', 'WargaController::delete/$1'); // Hapus warga
 
 // Jenis Layanan routes
 $routes->get('/layanan', 'JenisLayananController::index');

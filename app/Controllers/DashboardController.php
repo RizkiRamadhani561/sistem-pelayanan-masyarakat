@@ -6,11 +6,11 @@
  * termasuk pengelolaan data warga, berita, dan wilayah administrasi.
  *
  * Fitur utama:
- * - Dashboard overview dengan statistik
- * - CRUD management untuk warga
- * - CRUD management untuk berita
- * - CRUD management untuk wilayah (RT/RW)
- * - Role-based access control untuk admin/petugas
+ * - Ringkasan dashboard dengan statistik
+ * - Manajemen CRUD untuk warga
+ * - Manajemen CRUD untuk berita
+ * - Manajemen CRUD untuk wilayah (RT/RW)
+ * - Kontrol akses berbasis peran untuk admin/petugas
  *
  * @package App\Controllers
  * @author Sistem Pelayanan Masyarakat Kembangan Raya
