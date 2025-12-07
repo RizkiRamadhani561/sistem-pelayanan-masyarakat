@@ -54,7 +54,7 @@ class NotifikasiController extends BaseController
             'title' => 'Manajemen Notifikasi - Sistem Pelayanan Masyarakat',
             'notifikasi' => $this->notifikasiModel->orderBy('created_at', 'DESC')->findAll(),
             'total_notifikasi' => $this->notifikasiModel->countAll(),
-            'belum_dibaca' => $this->notifikasiModel->where('status', 'belum_dibaca')->countAllResults(),
+            'belum_dibaca' => $this->notifikasiModel->where('is_read', 0)->countAllResults(),
         ];
 
         return view('admin/notifikasi/index', $data);
@@ -150,14 +150,12 @@ class NotifikasiController extends BaseController
         }
 
         $data = [
-            'judul' => $this->request->getPost('judul'),
             'pesan' => $this->request->getPost('pesan'),
-            'tipe_penerima' => $this->request->getPost('tipe_penerima'),
-            'prioritas' => $this->request->getPost('prioritas'),
-            'pengirim_id' => session('user')['id_user'],
-            'status' => 'belum_dibaca',
+            'link' => $this->request->getPost('link') ?? null,
+            'warga_id' => null, // Will be set based on recipient type
+            'user_id' => null, // Will be set based on recipient type
+            'is_read' => 0, // 0 = unread, 1 = read
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         // Set penerima untuk notifikasi personal
@@ -192,8 +190,7 @@ class NotifikasiController extends BaseController
         $id = $this->request->getPost('id');
 
         if ($this->notifikasiModel->update($id, [
-            'status' => 'sudah_dibaca',
-            'updated_at' => date('Y-m-d H:i:s')
+            'is_read' => 1,
         ])) {
             return $this->response->setJSON([
                 'success' => true,
@@ -241,13 +238,11 @@ class NotifikasiController extends BaseController
 
         foreach ($petugas as $p) {
             $this->notifikasiModel->insert([
-                'judul' => 'Pengaduan Baru Masuk',
                 'pesan' => "Ada pengaduan baru dari {$pengaduan['judul']} yang perlu ditangani.",
-                'tipe_penerima' => 'petugas',
-                'prioritas' => 'sedang',
-                'status' => 'belum_dibaca',
+                'warga_id' => null,
+                'user_id' => $p['id_user'], // Send to this specific petugas
+                'is_read' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
             ]);
         }
     }
@@ -262,13 +257,11 @@ class NotifikasiController extends BaseController
     {
         // Kirim notifikasi ke petugas yang bertugas
         $this->notifikasiModel->insert([
-            'judul' => 'Permohonan Layanan Baru',
             'pesan' => "Ada permohonan layanan baru dengan nomor {$permohonan['nomor_permohonan']}.",
-            'tipe_penerima' => 'petugas',
-            'prioritas' => 'sedang',
-            'status' => 'belum_dibaca',
+            'warga_id' => null,
+            'user_id' => null, // Send to all petugas (will be handled by notification system)
+            'is_read' => 0,
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
         ]);
     }
 
