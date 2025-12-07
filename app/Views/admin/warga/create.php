@@ -72,7 +72,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form action="/dashboard/warga/store" method="post" class="needs-validation" novalidate>
+                    <form action="/dashboard/warga/store" method="post" novalidate>
                         <?= csrf_field() ?>
 
                         <!-- Informasi Pribadi -->
