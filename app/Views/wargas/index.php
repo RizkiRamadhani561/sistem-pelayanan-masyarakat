@@ -151,12 +151,14 @@
                                                            title="Edit Data">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a href="/wargas/<?= $warga['id_warga'] ?>/delete"
-                                                           class="btn btn-sm btn-outline-danger"
-                                                           title="Hapus Data"
-                                                           onclick="return confirm('Apakah Anda yakin ingin menghapus data warga ini?')">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
+                                                        <form method="POST" action="/wargas/<?= $warga['id_warga'] ?>/delete" style="display: inline;">
+                                                            <?= csrf_field() ?>
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                                    title="Hapus Data"
+                                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data warga "<?= htmlspecialchars($warga['nama_lengkap']) ?>" (NIK: <?= htmlspecialchars($warga['nik']) ?>) ?\n\nData yang sudah dihapus tidak dapat dikembalikan!')">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>

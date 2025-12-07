@@ -128,9 +128,12 @@
                                 <a href="/dashboard/warga/<?= $warga['id_warga'] ?>/edit" class="btn btn-warning">
                                     <i class="fas fa-edit me-1"></i>Edit Data
                                 </a>
-                                <button class="btn btn-danger" onclick="confirmDelete()">
-                                    <i class="fas fa-trash me-1"></i>Hapus Warga
-                                </button>
+                                <form method="POST" action="/dashboard/warga/<?= $warga['id_warga'] ?>/delete" style="display: inline;">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data warga "<?= htmlspecialchars($warga['nama_lengkap']) ?>" (NIK: <?= htmlspecialchars($warga['nik']) ?>) ?\n\nData yang sudah dihapus tidak dapat dikembalikan!')">
+                                        <i class="fas fa-trash me-1"></i>Hapus Warga
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -409,9 +412,12 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i>Batal
                     </button>
-                    <a href="/dashboard/warga/<?= $warga['id_warga'] ?>/delete" class="btn btn-danger">
-                        <i class="fas fa-trash me-1"></i>Ya, Hapus Data
-                    </a>
+                    <form method="POST" action="/dashboard/warga/<?= $warga['id_warga'] ?>/delete" style="display: inline;">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Ya, Hapus Data
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

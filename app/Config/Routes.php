@@ -28,7 +28,7 @@ $routes->post('/wargas/store', 'WargaController::store');    // Simpan warga bar
 $routes->get('/wargas/(:num)', 'WargaController::show/$1');  // Detail warga
 $routes->get('/wargas/(:num)/edit', 'WargaController::edit/$1'); // Form edit warga
 $routes->post('/wargas/(:num)/update', 'WargaController::update/$1'); // Update warga
-$routes->get('/wargas/(:num)/delete', 'WargaController::delete/$1'); // Hapus warga
+$routes->post('/wargas/(:num)/delete', 'WargaController::delete/$1'); // Hapus warga
 $routes->get('/wargas/test-add', 'WargaController::testAdd'); // Test method untuk menambah warga
 
 // Jenis Layanan routes
@@ -75,7 +75,7 @@ $routes->post('/dashboard/warga/store', 'DashboardController::storeWarga');
 $routes->get('/dashboard/warga/(:num)', 'DashboardController::showWarga/$1');
 $routes->get('/dashboard/warga/(:num)/edit', 'DashboardController::editWarga/$1');
 $routes->post('/dashboard/warga/(:num)/update', 'DashboardController::updateWarga/$1');
-$routes->get('/dashboard/warga/(:num)/delete', 'DashboardController::deleteWarga/$1');
+$routes->post('/dashboard/warga/(:num)/delete', 'DashboardController::deleteWarga/$1');
 
 // Notification routes
 $routes->get('/notifikasi', 'NotifikasiController::userNotifications');

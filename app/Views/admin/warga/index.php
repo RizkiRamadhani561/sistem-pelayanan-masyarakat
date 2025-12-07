@@ -258,9 +258,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <a href="#" id="deleteConfirmBtn" class="btn btn-danger">
-                    <i class="bi bi-trash me-2"></i>Hapus
-                </a>
+                <form method="POST" id="deleteForm" style="display: inline;">
+                    <?= csrf_field() ?>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Hapus
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -326,7 +329,7 @@ function resetFilters() {
 
 function confirmDelete(id, name) {
     document.getElementById('deleteWargaName').textContent = name;
-    document.getElementById('deleteConfirmBtn').href = `/dashboard/warga/${id}/delete`;
+    document.getElementById('deleteForm').action = `/dashboard/warga/${id}/delete`;
 
     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
     modal.show();
