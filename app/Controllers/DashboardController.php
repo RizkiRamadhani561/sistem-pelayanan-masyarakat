@@ -164,9 +164,19 @@ class DashboardController extends BaseController
      */
     public function storeWarga()
     {
+        // Log untuk debugging
+        log_message('debug', 'storeWarga called');
+
         if (!$this->checkAccess()) {
+            log_message('debug', 'Access denied');
             return redirect()->to('/admin/login')->with('error', 'Akses ditolak.');
         }
+
+        log_message('debug', 'Access granted, processing form');
+
+        // Debug: Log semua POST data
+        $postData = $this->request->getPost();
+        log_message('debug', 'POST data: ' . json_encode($postData));
 
         $rules = [
             'nik' => 'required|numeric|exact_length[16]|is_unique[warga.nik,id_warga,{id_warga}]',
@@ -184,8 +194,11 @@ class DashboardController extends BaseController
         ];
 
         if (!$this->validate($rules)) {
+            log_message('debug', 'Validation failed: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+
+        log_message('debug', 'Validation passed, preparing data');
 
         $data = [
             'nik' => $this->request->getPost('nik'),
@@ -204,10 +217,23 @@ class DashboardController extends BaseController
             'updated_at' => date('Y-m-d H:i:s'),
         ];
 
-        if ($this->wargaModel->insert($data)) {
-            return redirect()->to('/dashboard/warga')->with('success', 'Data warga berhasil ditambahkan.');
-        } else {
-            return redirect()->back()->withInput()->with('error', 'Gagal menambahkan data warga.');
+        log_message('debug', 'Data prepared: ' . json_encode($data));
+
+        try {
+            $result = $this->wargaModel->insert($data);
+            log_message('debug', 'Insert result: ' . ($result ? 'Success (ID: ' . $result . ')' : 'Failed'));
+
+            if ($result) {
+                log_message('debug', 'Redirecting to success');
+                return redirect()->to('/dashboard/warga')->with('success', 'Data warga berhasil ditambahkan.');
+            } else {
+                log_message('debug', 'Insert failed, redirecting back');
+                return redirect()->back()->withInput()->with('error', 'Gagal menambahkan data warga.');
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Exception in storeWarga: ' . $e->getMessage());
+            log_message('error', 'Exception trace: ' . $e->getTraceAsString());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
