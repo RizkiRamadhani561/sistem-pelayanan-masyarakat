@@ -12,7 +12,18 @@ class PermohonanModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = [
+        'nomor_permohonan',
+        'warga_id',
+        'jenis_id',
+        'status',
+        'keterangan',
+        'petugas_id',
+        'tanggal_pengajuan',
+        'tanggal_selesai',
+        'created_at',
+        'updated_at'
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
