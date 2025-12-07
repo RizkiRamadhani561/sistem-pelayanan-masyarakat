@@ -11,14 +11,14 @@
 	<link rel="icon" type="image/x-icon" href="/favicon.ico">
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
-	<!-- Bootstrap 5 CSS (Local) -->
-	<link href="/assets/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<!-- Bootstrap 4 CSS (CDN) -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
 	<!-- Bootstrap Icons -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 	<!-- Custom CSS -->
-	<link href="/css/style.css" rel="stylesheet">
-	<link href="/css/enhanced.css" rel="stylesheet">
-	<!-- Enhanced CSS for better UI -->
+	<link href="/css/navbar.css" rel="stylesheet">
 	<link href="/css/enhanced.css" rel="stylesheet">
 
 	<style>
@@ -188,119 +188,74 @@
 	</style>
 </head>
 <body class="bg-light">
-	<!-- Minimalistic Navbar -->
-	<!-- Navbar Modern -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top modern-navbar">
-            <div class="container py-2">
+    <div>
+        <div class="header-blue">
+            <nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">
+                <div class="container">
+                    <a class="navbar-brand" href="/">Sistem Pelayanan Masyarakat</a>
+                    <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navcol-1">
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" href="/">Beranda</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="/layanan">Layanan</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="/pengaduan">Pengaduan</a>
+                            </li>
+                            <?php if (session()->has('user')): ?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">
+                                    Admin <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a class="dropdown-item" role="presentation" href="/dashboard">Dashboard</a>
+                                    <a class="dropdown-item" role="presentation" href="/admin/notifikasi">Notifikasi</a>
+                                    <a class="dropdown-item" role="presentation" href="/admin/laporan">Laporan</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" role="presentation" href="/logout">Logout</a>
+                                </div>
+                            </li>
+                            <?php elseif (session()->has('warga')): ?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">
+                                    Akun Saya <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a class="dropdown-item" role="presentation" href="/pengaduan">Pengaduan Saya</a>
+                                    <a class="dropdown-item" role="presentation" href="/permohonan">Permohonan Saya</a>
+                                    <a class="dropdown-item" role="presentation" href="/notifikasi">Notifikasi</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" role="presentation" href="/logout">Logout</a>
+                                </div>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
 
-                <!-- Brand -->
-                <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="/">
-                    <i class="bi bi-building fs-4 me-2 text-primary"></i>
-                    <span class="brand-text">Kembangan Raya</span>
-                </a>
+                        <form class="form-inline mr-auto" target="_self">
+                            <div class="form-group">
+                                <label for="search-field"><i class="fa fa-search"></i></label>
+                                <input class="form-control search-field" type="search" name="search" id="search-field" placeholder="Cari...">
+                            </div>
+                        </form>
 
-                <!-- Toggler -->
-                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Menu -->
-                <div class="collapse navbar-collapse" id="mainNavbar">
-
-                    <!-- Left Menu -->
-                    <ul class="navbar-nav mx-auto gap-lg-2">
-                        <li class="nav-item">
-                            <a class="nav-link modern-nav-link" href="/">
-                                <i class="bi bi-house-door d-lg-none me-2"></i> Beranda
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link modern-nav-link" href="/layanan">
-                                <i class="bi bi-file-earmark-text d-lg-none me-2"></i> Layanan
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link modern-nav-link" href="/pengaduan">
-                                <i class="bi bi-exclamation-triangle d-lg-none me-2"></i> Pengaduan
-                            </a>
-                        </li>
-                    </ul>
-
-                    <!-- Right Side / User Section -->
-                    <ul class="navbar-nav ms-auto">
-
-                        <?php if (session()->has('user')): ?>
-                        <!-- Admin/Petugas -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle modern-user-btn" href="#" data-bs-toggle="dropdown">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiNFNUU3RUIiLz4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxMSIgcj0iNSIgZmlsbD0iIzlCOUI5NCIvPgo8cGF0aCBkPSJNMCAyNGgzMnY4SDB2LThaIiBmaWxsPSIjOUI5QkE0Ii8+Cjwvc3ZnPgo=" class="user-icon me-2">
-                                <span class="user-info d-none d-lg-inline">
-                                    <strong><?= session('user')['nama'] ?></strong>
-                                    <small class="text-muted d-block"><?= ucfirst(session('user')['role']) ?></small>
-                                </span>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                                <li><a class="dropdown-item py-2" href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
-                                <li><a class="dropdown-item py-2" href="/admin/notifikasi"><i class="bi bi-bell me-2"></i>Notifikasi</a></li>
-                                <li><a class="dropdown-item py-2" href="/admin/laporan"><i class="bi bi-graph-up me-2"></i>Laporan</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger py-2" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
-
-                        <?php elseif (session()->has('warga')): ?>
-                        <!-- Warga -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle modern-user-btn" href="#" data-bs-toggle="dropdown">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTYiIGZpbGw9IiNFNUU3RUIiLz4KPGNpcmNsZSBjeD0iMTYiIGN5PSIxMSIgcj0iNSIgZmlsbD0iIzlCOUI5NCIvPgo8cGF0aCBkPSJNMCAyNGgzMnY4SDB2LThaIiBmaWxsPSIjOUI5QkE0Ii8+Cjwvc3ZnPgo=" class="user-icon me-2">
-                                <span class="user-info d-none d-lg-inline">
-                                    <strong><?= session('warga')['nama_lengkap'] ?></strong>
-                                    <small class="text-muted d-block">Warga</small>
-                                </span>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                                <li><a class="dropdown-item py-2" href="/pengaduan"><i class="bi bi-exclamation-triangle me-2"></i>Pengaduan Saya</a></li>
-                                <li><a class="dropdown-item py-2" href="/permohonan"><i class="bi bi-file-earmark-text me-2"></i>Permohonan Saya</a></li>
-                                <li><a class="dropdown-item py-2" href="/notifikasi"><i class="bi bi-bell me-2"></i>Notifikasi</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger py-2" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
-
-                        <?php else: ?>
-                        <!-- Guest -->
-                        <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary px-3" href="/login">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                            </a>
-                        </li>
-
-                        <li class="nav-item me-3">
-                            <a class="btn btn-primary px-3" href="/register">
-                                <i class="bi bi-person-plus me-1"></i> Daftar
-                            </a>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                            <button class="btn btn-secondary dropdown-toggle px-3" data-bs-toggle="dropdown">
-                                <i class="bi bi-shield-lock me-1"></i> Admin
-                            </button>
-
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                                <li><a class="dropdown-item py-2" href="/admin/login"><i class="bi bi-shield-lock me-2"></i>Login Admin/Petugas</a></li>
-                            </ul>
-                        </li>
+                        <?php if (!session()->has('user') && !session()->has('warga')): ?>
+                        <span class="navbar-text">
+                            <a href="/login" class="login">Log In</a>
+                        </span>
+                        <a class="btn btn-light action-button" role="button" href="/register">Sign Up</a>
+                        <a class="btn btn-outline-light ml-2" role="button" href="/admin/login">Admin</a>
                         <?php endif; ?>
-
-                    </ul>
+                    </div>
                 </div>
-
-            </div>
-        </nav>
+            </nav>
+        </div>
+    </div>
 
 
 	<!-- Main Content -->
@@ -329,8 +284,9 @@
 		</div>
 	</footer>
 
-	<!-- Bootstrap 5 JS (Local) -->
-	<script src="/assets/bootstrap/bootstrap.bundle.min.js"></script>
+	<!-- Bootstrap 4 JS (CDN) -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
 
     <!-- Animation System JS -->
     <script src="/js/animations.js"></script>
@@ -338,68 +294,66 @@
     <!-- Custom JS -->
     <script>
         // Initialize additional animations
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
             // Lazy loading images
-            const images = document.querySelectorAll('.lazy-img');
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src;
-                        img.classList.add('loaded');
-                        observer.unobserve(img);
-                    }
+            $('.lazy-img').each(function() {
+                var img = $(this);
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            img.attr('src', img.data('src'));
+                            img.addClass('loaded');
+                            observer.unobserve(img[0]);
+                        }
+                    });
                 });
+                observer.observe(img[0]);
             });
-
-            images.forEach(img => imageObserver.observe(img));
-
-            // Toast notifications
-            const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-            const toastList = toastElList.map(function (toastEl) {
-                return new bootstrap.Toast(toastEl);
-            });
-
-            // Auto show toasts
-            toastList.forEach(toast => toast.show());
 
             // Add animated classes to elements
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                card.classList.add('fade-in-up');
-            });
+            $('.card').addClass('fade-in-up');
 
             // Add floating animation to icons
-            const icons = document.querySelectorAll('.bi');
-            icons.forEach((icon, index) => {
+            $('.bi').each(function(index) {
                 if (index % 3 === 0) { // Add floating to every 3rd icon
-                    icon.classList.add('floating-element');
+                    $(this).addClass('floating-element');
                 }
             });
 
             // Add counter animation to statistics
-            const stats = document.querySelectorAll('.stat-number');
-            stats.forEach(stat => {
-                stat.classList.add('counter');
-                stat.dataset.target = stat.textContent.replace(/\D/g, '');
+            $('.stat-number').each(function() {
+                $(this).addClass('counter');
+                var target = parseInt($(this).text().replace(/\D/g, ''));
+                $(this).data('target', target);
             });
 
             // Add enhanced hover effects to service cards
-            const serviceCards = document.querySelectorAll('.card');
-            serviceCards.forEach(card => {
-                card.classList.add('card-hover-enhanced');
-            });
+            $('.card').addClass('card-hover-enhanced');
 
             // Add animated buttons
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(btn => {
-                btn.classList.add('btn-animated');
-            });
+            $('.btn').addClass('btn-animated');
 
             // Add animated form inputs
-            const formInputs = document.querySelectorAll('.form-control');
-            formInputs.forEach(input => {
-                input.classList.add('form-control-animated');
+            $('.form-control').addClass('form-control-animated');
+
+            // Navbar scroll effect
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('.navigation-clean-search').addClass('scrolled');
+                } else {
+                    $('.navigation-clean-search').removeClass('scrolled');
+                }
+            });
+
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function(event) {
+                var target = $(this.getAttribute('href'));
+                if (target.length) {
+                    event.preventDefault();
+                    $('html, body').stop().animate({
+                        scrollTop: target.offset().top - 70
+                    }, 1000);
+                }
             });
         });
     </script>
