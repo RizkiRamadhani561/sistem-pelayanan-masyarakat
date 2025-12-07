@@ -219,13 +219,22 @@ class DashboardController extends BaseController
 
         log_message('debug', 'Data prepared: ' . json_encode($data));
 
+        // Debug: Show the actual SQL query
+        $builder = $this->wargaModel->builder();
+        $sql = $builder->set($data)->getCompiledInsert('warga');
+        log_message('debug', 'SQL Query: ' . $sql);
+
         try {
             $result = $this->wargaModel->insert($data);
             log_message('debug', 'Insert result: ' . ($result ? 'Success (ID: ' . $result . ')' : 'Failed'));
 
+            // Debug: Verify data was inserted
             if ($result) {
+                $insertedData = $this->wargaModel->find($result);
+                log_message('debug', 'Inserted data verification: ' . json_encode($insertedData));
+
                 log_message('debug', 'Redirecting to success');
-                return redirect()->to('/dashboard/warga')->with('success', 'Data warga berhasil ditambahkan.');
+                return redirect()->to('/dashboard/warga')->with('success', 'Data warga berhasil ditambahkan dengan ID: ' . $result);
             } else {
                 log_message('debug', 'Insert failed, redirecting back');
                 return redirect()->back()->withInput()->with('error', 'Gagal menambahkan data warga.');
