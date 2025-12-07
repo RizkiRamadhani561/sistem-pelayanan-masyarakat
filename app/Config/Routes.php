@@ -52,9 +52,15 @@ $routes->get('/pengaduan/(:num)/edit', 'PengaduanController::edit/$1');
 $routes->post('/pengaduan/(:num)/update', 'PengaduanController::update/$1');
 $routes->post('/pengaduan/update-status', 'PengaduanController::updateStatus');
 
+/**
+ * ROUTES UNTUK AUTHENTICATION CONTROLLER
+ * Mengatur semua endpoint untuk autentikasi warga dan admin
+ */
+
 // Authentication routes
 $routes->get('/register', 'AuthController::register');
 $routes->post('/register', 'AuthController::store');
+$routes->get('/auth/test-register', 'AuthController::testRegister'); // Test method untuk registrasi
 $routes->get('/login', 'AuthController::login');
 $routes->post('/login', 'AuthController::authenticate');
 $routes->get('/admin/login', 'AuthController::adminLogin');

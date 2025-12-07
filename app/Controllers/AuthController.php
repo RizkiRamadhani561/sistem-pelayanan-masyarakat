@@ -328,4 +328,99 @@ class AuthController extends BaseController
         // Redirect ke homepage dengan pesan logout berhasil
         return redirect()->to('/')->with('success', 'Logout berhasil.');
     }
+
+    /**
+     * TEST METHOD - Registrasi warga untuk testing
+     * Akses: /auth/test-register
+     *
+     * @return string Response hasil test
+     */
+    public function testRegister()
+    {
+        log_message('debug', '=== TEST REGISTER METHOD CALLED ===');
+
+        // Cek jumlah warga saat ini
+        $currentCount = $this->wargaModel->countAll();
+        log_message('debug', 'Jumlah warga saat ini: ' . $currentCount);
+
+        // Generate NIK unik berdasarkan timestamp
+        $uniqueNik = '888' . time() . rand(100, 999);
+        log_message('debug', 'Generated unique NIK: ' . $uniqueNik);
+
+        // Data warga untuk testing
+        $testData = [
+            'nik' => $uniqueNik,
+            'nama_lengkap' => 'Test Warga Registrasi ' . date('H:i:s'),
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Jakarta',
+            'tanggal_lahir' => '1990-01-01',
+            'alamat' => 'Jl. Test Registrasi No. 123',
+            'rt_rw' => '01/02',
+            'kecamatan' => 'Test Kecamatan',
+            'kab_kota' => 'Jakarta Pusat',
+            'provinsi' => 'DKI Jakarta',
+            'no_hp' => '081234567890',
+            'email' => 'testreg' . time() . '@example.com',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        // Password untuk validasi (tidak disimpan)
+        $password = 'password123';
+
+        // Simulasi validasi seperti di store() method
+        $rules = [
+            'nik' => 'required|numeric|exact_length[16]|is_unique[warga.nik,id_warga,{id_warga}]',
+            'nama_lengkap' => 'required|min_length[3]|max_length[150]',
+            'jenis_kelamin' => 'required|in_list[L,P]',
+            'tempat_lahir' => 'required|max_length[100]',
+            'tanggal_lahir' => 'required|valid_date[Y-m-d]',
+            'alamat' => 'required|min_length[10]',
+            'rt_rw' => 'required|regex_match[/^\d{1,2}\/\d{1,2}$/]',
+            'kecamatan' => 'required|max_length[100]',
+            'kab_kota' => 'required|max_length[100]',
+            'provinsi' => 'required|max_length[100]',
+            'no_hp' => 'required|regex_match[/^[0-9+\-\s()]+$/]|min_length[10]',
+            'email' => 'permit_empty|valid_email|is_unique[warga.email,id_warga,{id_warga}]',
+        ];
+
+        // Set data untuk validasi
+        $validationData = array_merge($testData, ['password' => $password, 'confirm_password' => $password]);
+
+        if (!$this->validate($rules)) {
+            log_message('error', 'Validasi gagal: ' . json_encode($this->validator->getErrors()));
+            return "❌ VALIDATION FAILED: " . json_encode($this->validator->getErrors());
+        }
+
+        log_message('debug', 'Validasi berhasil, menyimpan data: ' . json_encode($testData));
+
+        try {
+            // Simpan ke database
+            $result = $this->wargaModel->insert($testData);
+
+            log_message('debug', 'Test register insert result: ' . ($result ? 'SUCCESS ID: ' . $result : 'FAILED'));
+
+            if ($result) {
+                // Verifikasi data tersimpan
+                $newCount = $this->wargaModel->countAll();
+                $savedData = $this->wargaModel->find($result);
+
+                return "✅ SUCCESS: Registrasi warga berhasil!\n" .
+                       "📊 ID Baru: " . $result . "\n" .
+                       "📊 Jumlah warga sebelum: " . $currentCount . "\n" .
+                       "📊 Jumlah warga setelah: " . $newCount . "\n" .
+                       "👤 NIK: " . $uniqueNik . "\n" .
+                       "👤 Nama: " . $testData['nama_lengkap'] . "\n" .
+                       "💾 Data tersimpan di database warga!\n\n" .
+                       "🎯 FORM REGISTRASI /register HARUSNYA BEKERJA!";
+            } else {
+                return "❌ FAILED: Tidak dapat menyimpan data registrasi ke database.";
+            }
+
+        } catch (\Exception $e) {
+            log_message('error', 'Exception dalam testRegister: ' . $e->getMessage());
+            return "💥 ERROR: " . $e->getMessage() . "\n" .
+                   "Stack trace tersimpan di log file.";
+        }
+    }
 }
