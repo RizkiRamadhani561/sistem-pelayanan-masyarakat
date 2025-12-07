@@ -291,9 +291,14 @@ class WargaController extends BaseController
      */
     public function update($id)
     {
+        log_message('debug', '=== WARGA UPDATE METHOD CALLED ===');
+        log_message('debug', 'Update warga ID: ' . $id);
+        log_message('debug', 'POST data: ' . json_encode($this->request->getPost()));
+
         $warga = $this->wargaModel->find($id);
 
         if (!$warga) {
+            log_message('error', 'Warga dengan ID ' . $id . ' tidak ditemukan');
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Warga tidak ditemukan');
         }
 
@@ -425,23 +430,61 @@ class WargaController extends BaseController
     /**
      * Hapus data warga
      *
-     * @param int $id ID warga
-     * @return \CodeIgniter\HTTP\RedirectResponse Redirect ke daftar warga
+     * Method ini menghapus data warga dari database berdasarkan ID yang diberikan.
+     * Dilengkapi dengan logging dan validasi keberadaan data sebelum dihapus.
+     *
+     * @param int $id ID warga yang akan dihapus
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirect ke daftar warga dengan pesan sukses/error
      */
     public function delete($id)
     {
+        // Log untuk debugging
+        log_message('debug', '=== WARGA DELETE METHOD CALLED ===');
+        log_message('debug', 'WargaController::delete() dipanggil dengan ID: ' . $id);
+
+        // Validasi ID
+        if (!is_numeric($id) || $id <= 0) {
+            log_message('error', 'ID warga tidak valid: ' . $id);
+            return redirect()->to('/wargas')
+                ->with('error', 'ID warga tidak valid.');
+        }
+
+        // Cari data warga berdasarkan ID
         $warga = $this->wargaModel->find($id);
 
         if (!$warga) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Warga tidak ditemukan');
+            log_message('warning', 'Warga dengan ID ' . $id . ' tidak ditemukan');
+            return redirect()->to('/wargas')
+                ->with('error', 'Data warga tidak ditemukan.');
         }
 
-        if ($this->wargaModel->delete($id)) {
+        log_message('debug', 'Data warga yang akan dihapus: ' . json_encode($warga));
+
+        // Simpan informasi warga untuk pesan sukses
+        $namaWarga = $warga['nama_lengkap'];
+        $nikWarga = $warga['nik'];
+
+        try {
+            // Lakukan penghapusan
+            $result = $this->wargaModel->delete($id);
+
+            if ($result) {
+                log_message('info', 'Warga berhasil dihapus - ID: ' . $id . ', Nama: ' . $namaWarga . ', NIK: ' . $nikWarga);
+
+                return redirect()->to('/wargas')
+                    ->with('success', 'Data warga "' . $namaWarga . '" (NIK: ' . $nikWarga . ') berhasil dihapus dari database.');
+            } else {
+                log_message('error', 'Gagal menghapus warga - ID: ' . $id . ' - delete() mengembalikan false');
+                return redirect()->to('/wargas')
+                    ->with('error', 'Gagal menghapus data warga. Silakan coba lagi.');
+            }
+
+        } catch (\Exception $e) {
+            log_message('error', 'Exception saat menghapus warga ID ' . $id . ': ' . $e->getMessage());
+            log_message('error', 'Exception trace: ' . $e->getTraceAsString());
+
             return redirect()->to('/wargas')
-                ->with('success', 'Data warga berhasil dihapus.');
-        } else {
-            return redirect()->back()
-                ->with('error', 'Gagal menghapus data warga.');
+                ->with('error', 'Terjadi kesalahan sistem saat menghapus data: ' . $e->getMessage());
         }
     }
 
@@ -493,10 +536,18 @@ class WargaController extends BaseController
     {
         log_message('debug', '=== TEST ADD WARGA METHOD CALLED ===');
 
+        // Cek jumlah warga saat ini
+        $currentCount = $this->wargaModel->countAll();
+        log_message('debug', 'Jumlah warga saat ini: ' . $currentCount);
+
+        // Generate NIK unik berdasarkan timestamp
+        $uniqueNik = '999' . time() . rand(100, 999);
+        log_message('debug', 'Generated unique NIK: ' . $uniqueNik);
+
         // Data warga untuk testing
         $testData = [
-            'nik' => '1234567890123456', // Pastikan unik
-            'nama_lengkap' => 'Test Warga Sistem',
+            'nik' => $uniqueNik, // NIK unik
+            'nama_lengkap' => 'Test Warga Sistem ' . date('H:i:s'),
             'jenis_kelamin' => 'L',
             'tempat_lahir' => 'Jakarta',
             'tanggal_lahir' => '1990-01-01',
@@ -506,7 +557,7 @@ class WargaController extends BaseController
             'kab_kota' => 'Jakarta Pusat',
             'provinsi' => 'DKI Jakarta',
             'no_hp' => '081234567890',
-            'email' => 'test@example.com',
+            'email' => 'test' . time() . '@example.com',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ];
@@ -520,17 +571,26 @@ class WargaController extends BaseController
             log_message('debug', 'Test insert result: ' . ($result ? 'SUCCESS ID: ' . $result : 'FAILED'));
 
             if ($result) {
-                return "SUCCESS: Warga berhasil ditambahkan dengan ID: " . $result . "\n" .
-                       "Data tersimpan di database. Silakan cek tabel warga.";
+                // Verifikasi data tersimpan
+                $newCount = $this->wargaModel->countAll();
+                $savedData = $this->wargaModel->find($result);
+
+                return "✅ SUCCESS: Warga berhasil ditambahkan!\n" .
+                       "📊 ID Baru: " . $result . "\n" .
+                       "📊 Jumlah warga sebelum: " . $currentCount . "\n" .
+                       "📊 Jumlah warga setelah: " . $newCount . "\n" .
+                       "👤 NIK: " . $uniqueNik . "\n" .
+                       "👤 Nama: " . $testData['nama_lengkap'] . "\n" .
+                       "💾 Data tersimpan di database MySQL!";
             } else {
-                return "FAILED: Tidak dapat menyimpan data warga ke database.\n" .
-                       "Periksa koneksi database dan struktur tabel.";
+                return "❌ FAILED: Tidak dapat menyimpan data warga ke database.\n" .
+                       "🔍 Periksa koneksi database dan struktur tabel.";
             }
 
         } catch (\Exception $e) {
             log_message('error', 'Exception dalam testAdd: ' . $e->getMessage());
-            return "ERROR: " . $e->getMessage() . "\n" .
-                   "Stack trace: " . $e->getTraceAsString();
+            return "💥 ERROR: " . $e->getMessage() . "\n" .
+                   "🔍 Stack trace tersimpan di log file.";
         }
     }
 
