@@ -433,7 +433,7 @@
                                                     <?= esc($pengaduan['judul']) ?>
                                                 </h5>
                                                 <p class="result-description">
-                                                    <?= esc(substr($pengaduan['deskripsi'], 0, 150)) ?>...
+                                                    <?= esc(substr($pengaduan['isi_pengaduan'] ?? '', 0, 150)) . (strlen($pengaduan['isi_pengaduan'] ?? '') > 150 ? '...' : '') ?>
                                                 </p>
                                                 <div class="result-meta">
                                                     <span class="result-meta-item">

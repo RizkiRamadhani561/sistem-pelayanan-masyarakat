@@ -111,47 +111,65 @@ class SearchController extends BaseController
         ];
 
         // Pencarian pengaduan (untuk semua pengguna)
-        $pengaduanQuery = $this->pengaduanModel
-            ->like('judul', $query)
-            ->orLike('deskripsi', $query)
-            ->orLike('lokasi', $query);
+        try {
+            $pengaduanQuery = $this->pengaduanModel
+                ->like('judul', $query)
+                ->orLike('isi_pengaduan', $query)
+                ->orLike('lokasi', $query);
 
-        // Jika user adalah warga, hanya tampilkan pengaduan mereka sendiri
-        if (session()->has('warga')) {
-            $pengaduanQuery->where('warga_id', session('warga')['id_warga']);
-        }
-        // Jika user adalah admin/petugas, tampilkan semua pengaduan
+            // Jika user adalah warga, hanya tampilkan pengaduan mereka sendiri
+            if (session()->has('warga')) {
+                $pengaduanQuery->where('warga_id', session('warga')['id_warga']);
+            }
+            // Jika user adalah admin/petugas, tampilkan semua pengaduan
 
-        if ($limit) {
-            $results['pengaduan'] = $pengaduanQuery->limit($limit)->findAll();
-        } else {
-            $results['pengaduan'] = $pengaduanQuery->findAll();
+            if ($limit) {
+                $results['pengaduan'] = $pengaduanQuery->limit($limit)->findAll();
+            } else {
+                $results['pengaduan'] = $pengaduanQuery->findAll();
+            }
+        } catch (\Exception $e) {
+            // Log error but continue with other searches
+            log_message('error', 'Search pengaduan error: ' . $e->getMessage());
+            $results['pengaduan'] = [];
         }
 
         // Pencarian jenis layanan (untuk semua pengguna)
-        $layananQuery = $this->jenisLayananModel
-            ->like('nama_pelayanan', $query)
-            ->orLike('deskripsi', $query)
-            ->orLike('syarat', $query);
+        try {
+            $layananQuery = $this->jenisLayananModel
+                ->like('nama_pelayanan', $query)
+                ->orLike('deskripsi', $query)
+                ->orLike('syarat', $query);
 
-        if ($limit) {
-            $results['layanan'] = $layananQuery->limit($limit)->findAll();
-        } else {
-            $results['layanan'] = $layananQuery->findAll();
+            if ($limit) {
+                $results['layanan'] = $layananQuery->limit($limit)->findAll();
+            } else {
+                $results['layanan'] = $layananQuery->findAll();
+            }
+        } catch (\Exception $e) {
+            // Log error but continue with other searches
+            log_message('error', 'Search layanan error: ' . $e->getMessage());
+            $results['layanan'] = [];
         }
 
         // Pencarian warga (hanya untuk admin/petugas)
         if (session()->has('user') && in_array(session('user')['role'], ['admin', 'petugas'])) {
-            $wargaQuery = $this->wargaModel
-                ->like('nama_lengkap', $query)
-                ->orLike('nik', $query)
-                ->orLike('email', $query)
-                ->orLike('alamat', $query);
+            try {
+                $wargaQuery = $this->wargaModel
+                    ->like('nama_lengkap', $query)
+                    ->orLike('nik', $query)
+                    ->orLike('email', $query)
+                    ->orLike('alamat', $query);
 
-            if ($limit) {
-                $results['warga'] = $wargaQuery->limit($limit)->findAll();
-            } else {
-                $results['warga'] = $wargaQuery->findAll();
+                if ($limit) {
+                    $results['warga'] = $wargaQuery->limit($limit)->findAll();
+                } else {
+                    $results['warga'] = $wargaQuery->findAll();
+                }
+            } catch (\Exception $e) {
+                // Log error but continue with other searches
+                log_message('error', 'Search warga error: ' . $e->getMessage());
+                $results['warga'] = [];
             }
         }
 
@@ -189,7 +207,7 @@ class SearchController extends BaseController
                 'id' => $item['id_pengaduan'],
                 'type' => 'pengaduan',
                 'title' => $item['judul'],
-                'description' => substr($item['deskripsi'], 0, 100) . '...',
+                'description' => substr($item['isi_pengaduan'] ?? '', 0, 100) . (strlen($item['isi_pengaduan'] ?? '') > 100 ? '...' : ''),
                 'url' => '/pengaduan/' . $item['id_pengaduan'],
                 'icon' => 'bi-exclamation-triangle',
                 'category' => 'Pengaduan'
@@ -275,34 +293,49 @@ class SearchController extends BaseController
 
         switch ($category) {
             case 'pengaduan':
-                $queryBuilder = $this->pengaduanModel
-                    ->like('judul', $query)
-                    ->orLike('deskripsi', $query)
-                    ->orLike('lokasi', $query);
+                try {
+                    $queryBuilder = $this->pengaduanModel
+                        ->like('judul', $query)
+                        ->orLike('isi_pengaduan', $query)
+                        ->orLike('lokasi', $query);
 
-                if (session()->has('warga')) {
-                    $queryBuilder->where('warga_id', session('warga')['id_warga']);
+                    if (session()->has('warga')) {
+                        $queryBuilder->where('warga_id', session('warga')['id_warga']);
+                    }
+
+                    $results['pengaduan'] = $queryBuilder->findAll();
+                } catch (\Exception $e) {
+                    log_message('error', 'Search by category pengaduan error: ' . $e->getMessage());
+                    $results['pengaduan'] = [];
                 }
-
-                $results['pengaduan'] = $queryBuilder->findAll();
                 break;
 
             case 'layanan':
-                $results['layanan'] = $this->jenisLayananModel
-                    ->like('nama_pelayanan', $query)
-                    ->orLike('deskripsi', $query)
-                    ->orLike('syarat', $query)
-                    ->findAll();
+                try {
+                    $results['layanan'] = $this->jenisLayananModel
+                        ->like('nama_pelayanan', $query)
+                        ->orLike('deskripsi', $query)
+                        ->orLike('syarat', $query)
+                        ->findAll();
+                } catch (\Exception $e) {
+                    log_message('error', 'Search by category layanan error: ' . $e->getMessage());
+                    $results['layanan'] = [];
+                }
                 break;
 
             case 'warga':
                 if (session()->has('user') && in_array(session('user')['role'], ['admin', 'petugas'])) {
-                    $results['warga'] = $this->wargaModel
-                        ->like('nama_lengkap', $query)
-                        ->orLike('nik', $query)
-                        ->orLike('email', $query)
-                        ->orLike('alamat', $query)
-                        ->findAll();
+                    try {
+                        $results['warga'] = $this->wargaModel
+                            ->like('nama_lengkap', $query)
+                            ->orLike('nik', $query)
+                            ->orLike('email', $query)
+                            ->orLike('alamat', $query)
+                            ->findAll();
+                    } catch (\Exception $e) {
+                        log_message('error', 'Search by category warga error: ' . $e->getMessage());
+                        $results['warga'] = [];
+                    }
                 }
                 break;
         }
