@@ -99,3 +99,15 @@ $routes->get('/admin/laporan/export/(:segment)/(:segment)', 'LaporanController::
 $routes->get('/search', 'SearchController::index');
 $routes->get('/api/search', 'SearchController::apiSearch');
 $routes->get('/search/advanced', 'SearchController::advanced');
+
+// Profile routes
+$routes->get('/profile', 'ProfileController::index');
+$routes->post('/profile/update', 'ProfileController::update');
+$routes->post('/profile/upload-photo', 'ProfileController::uploadPhoto');
+$routes->post('/profile/change-password', 'ProfileController::changePassword');
+$routes->post('/profile/delete-photo', 'ProfileController::deletePhoto');
+
+// Admin profile routes
+$routes->get('/admin/profile', 'ProfileController::adminProfile');
+$routes->post('/admin/profile/update', 'ProfileController::updateAdminProfile');
+$routes->post('/admin/profile/change-password', 'ProfileController::changeAdminPassword');

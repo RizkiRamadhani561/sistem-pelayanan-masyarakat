@@ -289,6 +289,10 @@
                                 <a class="dropdown-item" href="/profile">
                                     <i class="bi bi-person-gear"></i> Pengaturan Profil
                                 </a>
+                                <a class="dropdown-item" href="/profile?tab=password">
+                                    <i class="bi bi-shield-lock"></i> Ubah Kata Sandi
+                                </a>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" href="/logout">
                                     <i class="bi bi-box-arrow-right"></i> Logout
                                 </a>

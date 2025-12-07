@@ -60,6 +60,9 @@ writable/session/*
 writable/uploads/*
 !writable/uploads/index.html
 
+# Profile Photos
+uploads/profiles/*
+
 writable/debugbar/*
 !writable/debugbar/index.html
 

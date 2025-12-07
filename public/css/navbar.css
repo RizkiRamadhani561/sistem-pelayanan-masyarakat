@@ -28,7 +28,7 @@
 
 .modern-navbar .navbar-brand i {
   font-size: 2rem;
-  margin-right: 0.5rem;
+  margin-right: 10px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
