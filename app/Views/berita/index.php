@@ -366,6 +366,28 @@
             letter-spacing: 0.5px;
         }
 
+        .back-button {
+            background: #6c757d;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
         @media (max-width: 768px) {
             .news-hero h1 {
                 font-size: 2rem;
@@ -416,6 +438,12 @@
 
         <!-- News Content -->
         <div class="news-content">
+
+            <!-- Back Button -->
+            <a href="/" class="back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali ke Beranda
+            </a>
 
             <!-- Page Header -->
             <div class="page-header">
