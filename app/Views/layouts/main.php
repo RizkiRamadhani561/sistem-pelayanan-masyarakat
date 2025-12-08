@@ -350,9 +350,6 @@
                                 <a class="dropdown-item" href="/profile">
                                     <i class="bi bi-person-gear"></i> Pengaturan Profil
                                 </a>
-                                <a class="dropdown-item" href="/profile?tab=password">
-                                    <i class="bi bi-shield-lock"></i> Ubah Kata Sandi
-                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" href="/logout">
                                     <i class="bi bi-box-arrow-right"></i> Logout
@@ -491,17 +488,62 @@
                 $(this).removeClass('focused');
             });
 
-            // Dropdown hover effects for desktop
+            // Enhanced dropdown behavior for desktop
             if ($(window).width() > 991) {
                 $('.dropdown').hover(
                     function() {
-                        $(this).find('.dropdown-menu').stop(true, true).slideDown(200);
+                        // Only apply hover effect if dropdown is not already open from click
+                        if (!$(this).hasClass('show')) {
+                            $(this).find('.dropdown-menu').stop(true, true).slideDown(200);
+                        }
                     },
                     function() {
-                        $(this).find('.dropdown-menu').stop(true, true).slideUp(200);
+                        // Only hide on hover out if dropdown was opened by hover (not click)
+                        if (!$(this).hasClass('show')) {
+                            $(this).find('.dropdown-menu').stop(true, true).slideUp(200);
+                        }
                     }
                 );
+
+                // Prevent dropdown from closing on mouse movement within the dropdown
+                $('.dropdown-menu').on('mouseenter', function() {
+                    $(this).stop(true, true).show();
+                });
+
+                $('.dropdown-menu').on('mouseleave', function() {
+                    var dropdown = $(this).closest('.dropdown');
+                    // Only hide if it was opened by hover, not by click
+                    if (!dropdown.hasClass('show')) {
+                        $(this).stop(true, true).slideUp(200);
+                    }
+                });
             }
+
+            // Handle dropdown toggle button clicks
+            $('.dropdown-toggle').on('click', function(e) {
+                e.preventDefault();
+                var dropdown = $(this).closest('.dropdown');
+                var menu = dropdown.find('.dropdown-menu');
+
+                // Toggle the dropdown
+                if (dropdown.hasClass('show')) {
+                    dropdown.removeClass('show');
+                    menu.stop(true, true).slideUp(200);
+                } else {
+                    // Close other open dropdowns first
+                    $('.dropdown').removeClass('show').find('.dropdown-menu').stop(true, true).slideUp(200);
+
+                    dropdown.addClass('show');
+                    menu.stop(true, true).slideDown(200);
+                }
+            });
+
+            // Close dropdown when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.dropdown').length) {
+                    $('.dropdown').removeClass('show').find('.dropdown-menu').stop(true, true).slideUp(200);
+                }
+            });
 
             // Smooth scrolling for anchor links
             $('a[href^="#"]').on('click', function(event) {
