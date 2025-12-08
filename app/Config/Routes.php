@@ -111,3 +111,16 @@ $routes->post('/profile/delete-photo', 'ProfileController::deletePhoto');
 $routes->get('/admin/profile', 'ProfileController::adminProfile');
 $routes->post('/admin/profile/update', 'ProfileController::updateAdminProfile');
 $routes->post('/admin/profile/change-password', 'ProfileController::changeAdminPassword');
+
+// Berita routes
+$routes->get('/berita', 'BeritaController::beritaPublik');
+$routes->get('/berita/(:segment)', 'BeritaController::show/$1');
+
+// Admin berita routes
+$routes->get('/admin/berita', 'BeritaController::index');
+$routes->get('/admin/berita/create', 'BeritaController::create');
+$routes->post('/admin/berita/store', 'BeritaController::store');
+$routes->get('/admin/berita/(:num)/edit', 'BeritaController::edit/$1');
+$routes->post('/admin/berita/(:num)/update', 'BeritaController::update/$1');
+$routes->post('/admin/berita/(:num)/delete', 'BeritaController::delete/$1');
+$routes->post('/admin/berita/(:num)/toggle-status', 'BeritaController::toggleStatus/$1');
