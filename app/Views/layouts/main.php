@@ -259,7 +259,7 @@
 
             <!-- Navigation Menu (Desktop) -->
             <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link active" href="/">
                             <i class="bi bi-house-door d-lg-none me-2"></i>Beranda
@@ -282,18 +282,20 @@
                     </li>
                 </ul>
 
-                <!-- Search Bar (Desktop - Centered) -->
-                <div class="navbar-search-container d-none d-lg-block">
-                    <form class="search-form" action="/search" method="GET">
-                        <input type="text" class="search-input" name="q" placeholder="Cari layanan, pengaduan, berita..." autocomplete="off">
-                        <button type="submit" class="search-btn">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
-                </div>
+                <!-- Right Side - Search & User Profile -->
+                <div class="navbar-right d-flex align-items-center ms-auto">
+                    <!-- Search Bar (Desktop) -->
+                    <div class="navbar-search d-none d-lg-block me-3">
+                        <form class="form-inline" action="/search" method="GET">
+                            <div class="form-group">
+                                <label for="search-field" class="mr-2"><i class="fa fa-search"></i></label>
+                                <input class="form-control search-field" type="search" name="q" id="search-field" placeholder="Cari...">
+                            </div>
+                        </form>
+                    </div>
 
-                <!-- Right Side - User Profile / Auth Buttons -->
-                <div class="navbar-profile ms-auto">
+                    <!-- User Profile / Auth Buttons -->
+                    <div class="navbar-profile">
                     <?php if (session()->has('user')): ?>
                         <!-- Admin/Petugas Profile -->
                         <div class="dropdown">
