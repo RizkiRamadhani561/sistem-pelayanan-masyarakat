@@ -77,18 +77,23 @@ class NotifikasiController extends BaseController
 
         // Ambil notifikasi berdasarkan role pengguna
         if (session()->has('user')) {
-            // Untuk admin/petugas - ambil semua notifikasi sistem
+            // Untuk admin/petugas - ambil semua notifikasi sistem (broadcast) atau personal
             $data['notifikasi'] = $this->notifikasiModel
-                ->where('tipe_penerima', 'semua')
-                ->orWhere('tipe_penerima', 'petugas')
+                ->groupStart()
+                    ->where('warga_id IS NULL')
+                    ->where('user_id IS NULL')
+                ->groupEnd()
+                ->orWhere('user_id', session('user')['id_user'])
                 ->orderBy('created_at', 'DESC')
                 ->findAll();
         } elseif (session()->has('warga')) {
-            // Untuk warga - ambil notifikasi personal
+            // Untuk warga - ambil notifikasi broadcast atau personal
             $data['notifikasi'] = $this->notifikasiModel
-                ->where('tipe_penerima', 'semua')
-                ->orWhere('tipe_penerima', 'warga')
-                ->orWhere('penerima_id', session('warga')['id_warga'])
+                ->groupStart()
+                    ->where('warga_id IS NULL')
+                    ->where('user_id IS NULL')
+                ->groupEnd()
+                ->orWhere('warga_id', session('warga')['id_warga'])
                 ->orderBy('created_at', 'DESC')
                 ->findAll();
         }
@@ -134,39 +139,25 @@ class NotifikasiController extends BaseController
         }
 
         $rules = [
-            'judul' => 'required|min_length[5]|max_length[200]',
             'pesan' => 'required|min_length[10]',
-            'tipe_penerima' => 'required|in_list[semua,warga,petugas,personal]',
-            'prioritas' => 'required|in_list[rendah,sedang,tinggi,darurat]',
         ];
-
-        // Tambahkan validasi untuk penerima personal
-        if ($this->request->getPost('tipe_penerima') === 'personal') {
-            $rules['penerima_id'] = 'required';
-        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        // For now, create a simple broadcast notification
+        // TODO: Implement different recipient types when needed
         $data = [
             'pesan' => $this->request->getPost('pesan'),
             'link' => $this->request->getPost('link') ?? null,
-            'warga_id' => null, // Will be set based on recipient type
-            'user_id' => null, // Will be set based on recipient type
-            'is_read' => 0, // 0 = unread, 1 = read
+            'warga_id' => null, // null means broadcast to all
+            'user_id' => null,  // null means broadcast to all
+            'is_read' => 0,     // 0 = unread, 1 = read
             'created_at' => date('Y-m-d H:i:s'),
         ];
 
-        // Set penerima untuk notifikasi personal
-        if ($this->request->getPost('tipe_penerima') === 'personal') {
-            $data['penerima_id'] = $this->request->getPost('penerima_id');
-        }
-
         if ($this->notifikasiModel->insert($data)) {
-            // Kirim email notifikasi jika diperlukan
-            $this->kirimEmailNotifikasi($data);
-
             return redirect()->to('/admin/notifikasi')->with('success', 'Notifikasi berhasil dikirim');
         } else {
             return redirect()->back()->withInput()->with('error', 'Gagal mengirim notifikasi');
@@ -384,17 +375,24 @@ class NotifikasiController extends BaseController
         $limit = $this->request->getGet('limit') ?? 10;
 
         if (session()->has('user')) {
+            // Admin/petugas: get broadcast notifications or personal notifications
             $notifikasi = $this->notifikasiModel
-                ->where('tipe_penerima', 'semua')
-                ->orWhere('tipe_penerima', 'petugas')
+                ->groupStart()
+                    ->where('warga_id IS NULL')
+                    ->where('user_id IS NULL')
+                ->groupEnd()
+                ->orWhere('user_id', session('user')['id_user'])
                 ->orderBy('created_at', 'DESC')
                 ->limit($limit)
                 ->findAll();
         } elseif (session()->has('warga')) {
+            // Warga: get broadcast notifications or personal notifications
             $notifikasi = $this->notifikasiModel
-                ->where('tipe_penerima', 'semua')
-                ->orWhere('tipe_penerima', 'warga')
-                ->orWhere('penerima_id', session('warga')['id_warga'])
+                ->groupStart()
+                    ->where('warga_id IS NULL')
+                    ->where('user_id IS NULL')
+                ->groupEnd()
+                ->orWhere('warga_id', session('warga')['id_warga'])
                 ->orderBy('created_at', 'DESC')
                 ->limit($limit)
                 ->findAll();
