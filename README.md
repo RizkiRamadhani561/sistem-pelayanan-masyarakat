@@ -1039,87 +1039,94 @@ find /backup -name "*.sql" -mtime +180 -delete
 php spark report:generate --period=monthly
 ```
 
-### **🚀 Deployment Workflow**
+### **🚀 Deployment Workflow (Windows)**
 
 #### **1. Staging Deployment**
-```bash
-# 1. Create release branch
+```batch
+REM 1. Create release branch
 git checkout -b release/v1.2.3
 
-# 2. Run full test suite
+REM 2. Run full test suite
 composer run test
 composer run lint
 
-# 3. Build assets untuk production
-npm run build  # If using frontend build tools
+REM 3. Build assets untuk production
+REM npm run build  // If using frontend build tools
 
-# 4. Deploy to staging server
-rsync -avz --exclude='.git' --exclude='tests' ./ staging-server:/var/www/html/
+REM 4. Deploy to staging server menggunakan robocopy
+robocopy . C:\inetpub\wwwroot\staging /MIR /XD .git tests node_modules vendor
 
-# 5. Run staging migrations
-ssh staging-server 'cd /var/www/html && php spark migrate'
+REM 5. Run staging migrations
+cd C:\inetpub\wwwroot\staging
+php spark migrate
 
-# 6. Test staging environment thoroughly
-# - User registration/login
-# - Feature functionality
-# - Performance testing
-# - Security testing
+REM 6. Test staging environment thoroughly
+REM - User registration/login
+REM - Feature functionality
+REM - Performance testing
+REM - Security testing
 ```
 
 #### **2. Production Deployment**
-```bash
-# 1. Tag release
+```batch
+REM 1. Tag release
 git tag -a v1.2.3 -m "Release version 1.2.3"
 git push origin v1.2.3
 
-# 2. Backup production database
-ssh prod-server 'mysqldump sistem_pelayanan > pre_deploy_backup.sql'
+REM 2. Backup production database
+mysqldump -u %DB_USER% -p%DB_PASS% sistem_pelayanan > C:\backups\pre_deploy_backup_%DATE:~-4,4%%DATE:~-10,2%%DATE:~-7,2%.sql
 
-# 3. Enable maintenance mode
-ssh prod-server 'touch maintenance.flag'
+REM 3. Enable maintenance mode
+echo. > C:\inetpub\wwwroot\maintenance.flag
 
-# 4. Deploy code
-rsync -avz --exclude='.git' --exclude='tests' ./ prod-server:/var/www/html/
+REM 4. Deploy code menggunakan robocopy
+robocopy . C:\inetpub\wwwroot\production /MIR /XD .git tests node_modules vendor
 
-# 5. Install production dependencies
-ssh prod-server 'cd /var/www/html && composer install --no-dev --optimize-autoloader'
+REM 5. Install production dependencies
+cd C:\inetpub\wwwroot\production
+composer install --no-dev --optimize-autoloader
 
-# 6. Run migrations
-ssh prod-server 'cd /var/www/html && php spark migrate'
+REM 6. Run migrations
+php spark migrate
 
-# 7. Clear all caches
-ssh prod-server 'cd /var/www/html && php spark cache:clear'
+REM 7. Clear all caches
+php spark cache:clear
+if exist writable\cache rmdir /s /q writable\cache
 
-# 8. Set proper permissions
-ssh prod-server 'chown -R www-data:www-data /var/www/html/writable'
+REM 8. Set proper permissions
+icacls writable /grant "IIS_IUSRS:(OI)(CI)F" /T
+icacls public\uploads /grant "IIS_IUSRS:(OI)(CI)F" /T
 
-# 9. Disable maintenance mode
-ssh prod-server 'rm maintenance.flag'
+REM 9. Disable maintenance mode
+del C:\inetpub\wwwroot\maintenance.flag
 
-# 10. Monitor deployment
-# Check error logs, response times, user access
-tail -f /var/log/apache2/error.log
+REM 10. Monitor deployment
+REM Check error logs, response times, user access
+powershell "Get-Content C:\inetpub\logs\*.log -Tail 10 -Wait"
 ```
 
 #### **3. Rollback Plan**
-```bash
-# Jika deployment gagal:
-# 1. Enable maintenance mode immediately
-ssh prod-server 'touch maintenance.flag'
+```batch
+REM Jika deployment gagal:
+REM 1. Enable maintenance mode immediately
+echo. > C:\inetpub\wwwroot\maintenance.flag
 
-# 2. Restore database backup
-ssh prod-server 'mysql sistem_pelayanan < pre_deploy_backup.sql'
+REM 2. Restore database backup
+mysql -u %DB_USER% -p%DB_PASS% sistem_pelayanan < C:\backups\pre_deploy_backup_%DATE:~-4,4%%DATE:~-10,2%%DATE:~-7,2%.sql
 
-# 3. Rollback code
-ssh prod-server 'git checkout previous-working-commit'
+REM 3. Rollback code
+cd C:\inetpub\wwwroot\production
+git checkout previous-working-commit
 
-# 4. Clear caches
-ssh prod-server 'php spark cache:clear'
+REM 4. Clear caches
+php spark cache:clear
 
-# 5. Disable maintenance mode
-ssh prod-server 'rm maintenance.flag'
+REM 5. Disable maintenance mode
+del C:\inetpub\wwwroot\maintenance.flag
 
-# 6. Investigate root cause sebelum re-deploy
+REM 6. Investigate root cause sebelum re-deploy
+REM Check Windows Event Viewer dan IIS logs
+eventvwr.msc
 ```
 
 ### **🔍 Testing Workflows**
