@@ -3,18 +3,75 @@
 use CodeIgniter\Router\RouteCollection;
 
 /**
+ * =======================================================================
+ * KONFIGURASI ROUTES - SISTEM PELAYANAN MASYARAKAT KEMBANGAN RAYA
+ * =======================================================================
+ *
+ * File konfigurasi routing untuk CodeIgniter 4.
+ * Menentukan mapping antara URL endpoints dengan Controller methods.
+ *
+ * ROUTING PRINCIPLES:
+ * - ✅ RESTful URL patterns untuk CRUD operations
+ * - ✅ Hierarchical URL structure (admin/, api/, etc.)
+ * - ✅ Parameter binding dengan placeholders (:num, :segment)
+ * - ✅ HTTP method specificity (GET, POST, PUT, DELETE)
+ * - ✅ Security-aware routing (admin routes separated)
+ *
+ * URL STRUCTURE:
+ * - Public routes: / (tanpa prefix)
+ * - Admin routes: /admin/* (protected)
+ * - API routes: /api/* (JSON responses)
+ * - User routes: /profile, /notifikasi, etc.
+ *
+ * CONTROLLERS USED:
+ * - Home: Landing page dan informasi umum
+ * - AuthController: Login/register untuk warga dan admin
+ * - DashboardController: Admin dashboard dan management
+ * - BeritaController: News management dan public display
+ * - PengaduanController: Complaint system
+ * - PermohonanController: Service request system
+ * - NotifikasiController: Notification management
+ * - SearchController: Global search functionality
+ * - ProfileController: User profile management
+ * - LaporanController: Reporting dan analytics
+ *
+ * SECURITY NOTES:
+ * - Admin routes TIDAK dilindungi di level routing (gunakan middleware/filters)
+ * - Authentication checks dilakukan di controller level
+ * - CSRF protection aktif untuk POST routes
+ * - Route parameters di-validate di controller
+ *
+ * PERFORMANCE:
+ * - Routes di-cache dalam production
+ * - Auto-routing DISABLED untuk security
+ * - Named routes untuk maintainability
+ *
  * @var RouteCollection $routes
+ * @author Rizki Ramadhani
+ * @version 1.0.0
+ * @since 2025-12-06
  */
+
+// =======================================================================
+// HOMEPAGE ROUTE - Landing Page Utama
+// =======================================================================
+// Route default untuk homepage sistem
+// Menampilkan informasi umum dan navigasi ke fitur utama
 $routes->get('/', 'Home::index');
 
-// User routes
-$routes->get('/users', 'UserController::index');
-$routes->get('/users/create', 'UserController::create');
-$routes->post('/users/store', 'UserController::store');
-$routes->get('/users/(:num)', 'UserController::show/$1');
-$routes->get('/users/(:num)/edit', 'UserController::edit/$1');
-$routes->post('/users/(:num)/update', 'UserController::update/$1');
-$routes->get('/users/(:num)/delete', 'UserController::delete/$1');
+// =======================================================================
+// USER MANAGEMENT ROUTES - Admin User CRUD Operations
+// =======================================================================
+// Routes untuk mengelola user admin/petugas
+// ACCESS: Admin only (Super Admin)
+// CONTROLLER: UserController
+$routes->get('/users', 'UserController::index');                    // GET  /users           → UserController::index()     → List semua users
+$routes->get('/users/create', 'UserController::create');           // GET  /users/create    → UserController::create()    → Form tambah user baru
+$routes->post('/users/store', 'UserController::store');            // POST /users/store     → UserController::store()     → Simpan user baru
+$routes->get('/users/(:num)', 'UserController::show/$1');          // GET  /users/{id}      → UserController::show($id)   → Detail user spesifik
+$routes->get('/users/(:num)/edit', 'UserController::edit/$1');     // GET  /users/{id}/edit → UserController::edit($id)   → Form edit user
+$routes->post('/users/(:num)/update', 'UserController::update/$1'); // POST /users/{id}/update → UserController::update($id) → Update user
+$routes->get('/users/(:num)/delete', 'UserController::delete/$1'); // GET  /users/{id}/delete → UserController::delete($id) → Hapus user (confirm)
 
 /**
  * ROUTES UNTUK WARGA CONTROLLER
