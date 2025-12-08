@@ -80,6 +80,33 @@
             gap: 1rem;
         }
 
+        .page-title-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+            color: white;
+            text-decoration: none;
+        }
+
         .page-title {
             margin: 0;
             color: #495057;
@@ -429,7 +456,12 @@
 
                     <!-- Page Header -->
                     <div class="page-header">
-                        <h2 class="page-title">Daftar Berita</h2>
+                        <div class="page-title-section">
+                            <a href="/dashboard" class="btn-back">
+                                <i class="bi bi-arrow-left me-2"></i>Kembali ke Dashboard
+                            </a>
+                            <h2 class="page-title">Daftar Berita</h2>
+                        </div>
                         <a href="/admin/berita/create" class="btn-add-news">
                             <i class="bi bi-plus-circle me-2"></i>Tambah Berita
                         </a>
