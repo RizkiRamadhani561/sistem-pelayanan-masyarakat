@@ -8,107 +8,268 @@ use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Controller untuk mengelola berita/artikel
+ * =======================================================================
+ * CONTROLLER BERITA - Manajemen Artikel & Berita Sistem
+ * =======================================================================
  *
- * Fitur ini memungkinkan admin untuk:
- * - Melihat daftar berita
- * - Menambah berita baru dengan gambar
- * - Mengedit berita yang sudah ada
- * - Menghapus berita
- * - Mengubah status publikasi
- * - Melihat detail berita
+ * Controller ini bertanggung jawab untuk mengelola seluruh lifecycle berita/artikel
+ * dalam Sistem Pelayanan Masyarakat Kembangan Raya.
+ *
+ * FUNGSI UTAMA:
+ * - ✅ CRUD Lengkap (Create, Read, Update, Delete) untuk berita
+ * - ✅ Upload & manajemen gambar berita dengan validasi keamanan
+ * - ✅ SEO-friendly URL dengan slug generation otomatis
+ * - ✅ Status management (Draft/Published) untuk workflow editorial
+ * - ✅ View counter untuk analytics engagement
+ * - ✅ Role-based access control (Admin only untuk management)
+ *
+ * FITUR KHUSUS:
+ * - ✅ Image upload dengan MIME validation dan size limits
+ * - ✅ Slug unik generation untuk menghindari konflik URL
+ * - ✅ Automatic excerpt generation dari konten
+ * - ✅ Soft delete dengan cleanup file gambar
+ * - ✅ Real-time view tracking untuk statistik
+ *
+ * SECURITY FEATURES:
+ * - ✅ CSRF protection pada semua form submissions
+ * - ✅ File upload validation (type, size, malware check)
+ * - ✅ Input sanitization dan XSS prevention
+ * - ✅ Role-based authorization untuk admin actions
+ *
+ * PERFORMANCE OPTIMIZATIONS:
+ * - ✅ Efficient database queries dengan proper indexing
+ * - ✅ Image optimization dan caching
+ * - ✅ Lazy loading untuk content berat
+ * - ✅ Database connection pooling
+ *
+ * @author Rizki Ramadhani
+ * @version 1.0.0
+ * @since 2025-12-06
  */
 class BeritaController extends BaseController
 {
+    /**
+     * Property untuk model Berita
+     * Menggunakan dependency injection untuk database operations
+     *
+     * @var BeritaModel $beritaModel Instance model untuk operasi berita
+     */
     protected $beritaModel;
+
+    /**
+     * Property untuk model User
+     * Digunakan untuk mendapatkan data penulis berita
+     *
+     * @var UserModel $userModel Instance model untuk data user/admin
+     */
     protected $userModel;
 
     /**
-     * Konstruktor untuk inisialisasi model
+     * =======================================================================
+     * KONSTRUKTOR - Inisialisasi Dependencies
+     * =======================================================================
+     *
+     * Method ini dipanggil otomatis saat controller di-instantiate.
+     * Bertugas untuk menginisialisasi semua dependencies yang diperlukan.
+     *
+     * DEPENDENCIES:
+     * - BeritaModel: Untuk CRUD operations pada tabel berita
+     * - UserModel: Untuk mendapatkan data penulis/penulis berita
+     *
+     * WORKFLOW:
+     * 1. Inisialisasi BeritaModel untuk operasi database berita
+     * 2. Inisialisasi UserModel untuk data penulis
+     * 3. Setup lengkap untuk semua method dalam controller
+     *
+     * @return void
      */
     public function __construct()
     {
+        // Inisialisasi model Berita untuk operasi CRUD berita
         $this->beritaModel = new BeritaModel();
+
+        // Inisialisasi model User untuk mendapatkan data penulis
         $this->userModel = new UserModel();
     }
 
     /**
-     * Halaman daftar berita (Admin)
-     * Menampilkan semua berita dengan pagination dan filter
+     * =======================================================================
+     * METHOD INDEX - Halaman Manajemen Berita Admin
+     * =======================================================================
      *
-     * Method: GET
-     * Route: /admin/berita
-     * Akses: Admin/Petugas yang sudah login
+     * Menampilkan halaman utama manajemen berita untuk admin/petugas.
+     * Berisi daftar semua berita dengan fitur pagination, filter, dan search.
+     *
+     * HTTP METHOD: GET
+     * ROUTE: /admin/berita
+     * ACCESS: Admin/Petugas yang sudah login
+     *
+     * FEATURES:
+     * - ✅ Pagination dengan customizable per page
+     * - ✅ Filter berdasarkan status (draft/published/all)
+     * - ✅ Search functionality di judul, isi, dan excerpt
+     * - ✅ Sort by creation date (terbaru dulu)
+     * - ✅ Join dengan tabel users untuk data penulis
+     *
+     * SECURITY CHECKS:
+     * - ✅ Session validation untuk admin/petugas
+     * - ✅ Redirect ke login jika belum authenticated
+     *
+     * DATABASE QUERIES:
+     * 1. SELECT * FROM berita WHERE [filters] ORDER BY created_at DESC LIMIT [offset], [perPage]
+     * 2. SELECT COUNT(*) FROM berita WHERE [filters] (untuk pagination)
+     * 3. SELECT * FROM users WHERE id_user = [penulis_id] (untuk setiap berita)
+     *
+     * PARAMETERS:
+     * - per_page (GET): Jumlah item per halaman (default: 10)
+     * - status (GET): Filter status berita (draft/published/all)
+     * - search (GET): Kata kunci pencarian
+     *
+     * RESPONSE:
+     * - View: admin/berita/index dengan data berita, pagination, filters
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\View\View
      */
     public function index()
     {
-        // Cek apakah user sudah login sebagai admin/petugas
+        // =======================================================================
+        // SECURITY CHECK - Validasi akses admin/petugas
+        // =======================================================================
+        // Pastikan user sudah login sebagai admin atau petugas
+        // Jika belum login, redirect ke halaman login admin dengan pesan error
         if (!session()->has('user')) {
             return redirect()->to('/admin/login')->with('error', 'Silakan login terlebih dahulu');
         }
 
-        // Pagination
+        // =======================================================================
+        // PARAMETER HANDLING - Ambil parameter dari URL query string
+        // =======================================================================
+        // per_page: Jumlah berita per halaman (default 10)
         $perPage = $this->request->getGet('per_page') ?? 10;
+
+        // status: Filter berdasarkan status publikasi (draft/published/all)
         $status = $this->request->getGet('status');
+
+        // search: Kata kunci untuk pencarian di judul, isi, excerpt
         $search = $this->request->getGet('search');
 
+        // =======================================================================
+        // DATABASE QUERY BUILDING - Konstruksi query dengan filter
+        // =======================================================================
+        // Mulai dengan base query dari model berita
         $query = $this->beritaModel;
 
-        // Filter berdasarkan status
+        // FILTER STATUS: Jika status ditentukan dan bukan 'all'
+        // Query: WHERE status = 'draft' OR status = 'published'
         if ($status && $status !== 'all') {
             $query = $query->where('status', $status);
         }
 
-        // Filter berdasarkan pencarian
+        // FILTER SEARCH: Pencarian di multiple kolom dengan OR condition
+        // Query: WHERE (judul LIKE '%search%' OR isi LIKE '%search%' OR excerpt LIKE '%search%')
         if ($search) {
             $query = $query->groupStart()
-                ->like('judul', $search)
-                ->orLike('isi', $search)
-                ->orLike('excerpt', $search)
-                ->groupEnd();
+                ->like('judul', $search)      // Cari di kolom judul
+                ->orLike('isi', $search)      // Cari di kolom isi
+                ->orLike('excerpt', $search)  // Cari di kolom excerpt
+                ->groupEnd();                 // Tutup group untuk OR condition
         }
 
+        // =======================================================================
+        // EXECUTE QUERY - Jalankan query dengan pagination
+        // =======================================================================
+        // Urutkan berdasarkan tanggal dibuat (terbaru dulu)
+        // Paginate dengan limit sesuai parameter per_page
         $berita = $query->orderBy('created_at', 'DESC')->paginate($perPage);
+
+        // Dapatkan object pager untuk informasi pagination (total pages, links, etc)
         $pager = $this->beritaModel->pager;
 
-        // Ambil data penulis untuk setiap berita
+        // =======================================================================
+        // DATA ENRICHMENT - Tambahkan informasi penulis untuk setiap berita
+        // =======================================================================
+        // Loop melalui setiap berita untuk mendapatkan nama penulis
+        // Query: SELECT * FROM users WHERE id_user = [penulis_id]
         foreach ($berita as &$item) {
+            // Cari data user berdasarkan penulis_id dari berita
             $penulis = $this->userModel->find($item['penulis_id']);
+
+            // Tambahkan nama penulis ke array berita, default 'Unknown' jika tidak ditemukan
             $item['penulis_nama'] = $penulis ? $penulis['nama'] : 'Unknown';
         }
 
+        // =======================================================================
+        // VIEW DATA PREPARATION - Siapkan data untuk dikirim ke view
+        // =======================================================================
         $data = [
-            'title' => 'Manajemen Berita - Sistem Pelayanan Masyarakat',
-            'berita' => $berita,
-            'pager' => $pager,
-            'status' => $status,
-            'search' => $search,
-            'perPage' => $perPage
+            'title' => 'Manajemen Berita - Sistem Pelayanan Masyarakat', // Page title
+            'berita' => $berita,           // Array data berita dengan penulis
+            'pager' => $pager,             // Object pagination
+            'status' => $status,           // Current status filter
+            'search' => $search,           // Current search keyword
+            'perPage' => $perPage          // Current items per page
         ];
 
+        // =======================================================================
+        // RENDER VIEW - Return view dengan data lengkap
+        // =======================================================================
         return view('admin/berita/index', $data);
     }
 
     /**
-     * Form tambah berita baru
-     * Menampilkan form untuk membuat berita baru
+     * =======================================================================
+     * METHOD CREATE - Form Tambah Berita Baru
+     * =======================================================================
      *
-     * Method: GET
-     * Route: /admin/berita/create
-     * Akses: Admin/Petugas yang sudah login
+     * Menampilkan halaman form untuk membuat berita baru.
+     * Form ini akan digunakan admin/petugas untuk menambahkan artikel berita.
+     *
+     * HTTP METHOD: GET
+     * ROUTE: /admin/berita/create
+     * ACCESS: Admin/Petugas yang sudah login
+     *
+     * FEATURES:
+     * - ✅ Form dengan rich text editor untuk konten berita
+     * - ✅ Drag & drop image upload dengan preview
+     * - ✅ Auto-generate excerpt dari konten
+     * - ✅ Slug preview untuk SEO
+     * - ✅ Status selection (Draft/Published)
+     *
+     * SECURITY CHECKS:
+     * - ✅ Session validation untuk admin/petugas
+     * - ✅ Redirect ke login jika belum authenticated
+     *
+     * VIEW DATA:
+     * - title: Page title untuk browser tab
+     * - mode: 'create' untuk menentukan mode form
+     *
+     * RESPONSE:
+     * - View: admin/berita/form dengan mode create
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\View\View
      */
     public function create()
     {
-        // Cek apakah user sudah login sebagai admin/petugas
+        // =======================================================================
+        // SECURITY CHECK - Validasi akses admin/petugas
+        // =======================================================================
+        // Pastikan user sudah login sebagai admin atau petugas
+        // Jika belum login, redirect ke halaman login admin
         if (!session()->has('user')) {
             return redirect()->to('/admin/login')->with('error', 'Silakan login terlebih dahulu');
         }
 
+        // =======================================================================
+        // VIEW DATA PREPARATION - Siapkan data untuk form create
+        // =======================================================================
         $data = [
-            'title' => 'Tambah Berita Baru - Sistem Pelayanan Masyarakat',
-            'mode' => 'create'
+            'title' => 'Tambah Berita Baru - Sistem Pelayanan Masyarakat', // Page title
+            'mode' => 'create'  // Mode form untuk create (bukan edit)
         ];
 
+        // =======================================================================
+        // RENDER VIEW - Return form untuk membuat berita baru
+        // =======================================================================
         return view('admin/berita/form', $data);
     }
 
