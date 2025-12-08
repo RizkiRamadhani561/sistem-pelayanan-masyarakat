@@ -240,10 +240,11 @@
 		}
 	</style>
 </head>
-<body class="bg-light">
-    <!-- Modern Professional Navbar -->
-    <nav class="navbar navbar-expand-lg modern-navbar">
-        <div class="container-fluid px-4">
+<body>
+    <div>
+        <div class="header-blue">
+            <nav class="navbar navbar-dark navbar-expand-lg navigation-clean-search">
+                <div class="container">
 
             <!-- Brand Logo -->
             <a class="navbar-brand" href="/">
@@ -388,8 +389,10 @@
                     </button>
                 </form>
             </div>
+                </div>
+            </nav>
         </div>
-    </nav>
+    </div>
 
 
 	<!-- Main Content -->
@@ -479,16 +482,11 @@
                 }
             });
 
-            // Search form enhancement
-            $('.search-input').on('focus', function() {
-                $(this).parent().addClass('focused');
+            // Search form enhancement for header-blue navbar
+            $('.search-field').on('focus', function() {
+                $(this).addClass('focused');
             }).on('blur', function() {
-                $(this).parent().removeClass('focused');
-            });
-
-            // Mobile menu enhancement
-            $('.navbar-toggler').on('click', function() {
-                $('.modern-navbar').toggleClass('menu-open');
+                $(this).removeClass('focused');
             });
 
             // Dropdown hover effects for desktop
