@@ -240,83 +240,156 @@
 		}
 	</style>
 </head>
-<body>
-    <div>
-        <div class="header-blue">
-            <nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <i class="bi bi-building-fill me-2"></i>
-                        <span>Kembangan Raya</span>
-                    </a>
-                    <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navcol-1">
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" href="/">Beranda</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" href="/layanan">Layanan</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" href="/pengaduan">Pengaduan</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" href="/berita">Berita</a>
-                            </li>
-                            <?php if (session()->has('user')): ?>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">
-                                    Admin <span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu" role="menu">
-                                    <a class="dropdown-item" role="presentation" href="/dashboard">Dashboard</a>
-                                    <a class="dropdown-item" role="presentation" href="/admin/berita">Manajemen Berita</a>
-                                    <a class="dropdown-item" role="presentation" href="/admin/notifikasi">Notifikasi</a>
-                                    <a class="dropdown-item" role="presentation" href="/admin/laporan">Laporan</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" role="presentation" href="/logout">Logout</a>
-                                </div>
-                            </li>
-                            <?php elseif (session()->has('warga')): ?>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#">
-                                    Akun Saya <span class="caret"></span>
-                                </a>
-                                <div class="dropdown-menu" role="menu">
-                                    <a class="dropdown-item" role="presentation" href="/pengaduan">Pengaduan Saya</a>
-                                    <a class="dropdown-item" role="presentation" href="/permohonan">Permohonan Saya</a>
-                                    <a class="dropdown-item" role="presentation" href="/notifikasi">Notifikasi</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" role="presentation" href="/profile">Pengaturan Profil</a>
-                                    <a class="dropdown-item" role="presentation" href="/logout">Logout</a>
-                                </div>
-                            </li>
-                            <?php endif; ?>
-                        </ul>
+<body class="bg-light">
+    <!-- Modern Professional Navbar -->
+    <nav class="navbar navbar-expand-lg modern-navbar">
+        <div class="container-fluid px-4">
 
-                        <form class="form-inline mr-auto" target="_self" action="/search" method="GET">
-                            <div class="form-group">
-                                <label for="search-field"><i class="fa fa-search"></i></label>
-                                <input class="form-control search-field" type="search" name="q" id="search-field" placeholder="Cari...">
-                            </div>
-                        </form>
+            <!-- Brand Logo -->
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-building-fill"></i>
+                <span>Kembangan Raya</span>
+            </a>
 
-                        <?php if (!session()->has('user') && !session()->has('warga')): ?>
-                        <span class="navbar-text">
-                            <a href="/login" class="login">Log In</a>
-                        </span>
-                        <a class="btn btn-light action-button" role="button" href="/register">Sign Up</a>
-                        <a class="btn btn-outline-light action-button ml-2" role="button" href="/admin/login">Admin</a>
-                        <?php endif; ?>
-                    </div>
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Menu (Desktop) -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="bi bi-house-door d-lg-none me-2"></i>Beranda
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/layanan">
+                            <i class="bi bi-file-earmark-text d-lg-none me-2"></i>Layanan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pengaduan">
+                            <i class="bi bi-exclamation-triangle d-lg-none me-2"></i>Pengaduan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/berita">
+                            <i class="bi bi-newspaper d-lg-none me-2"></i>Berita
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Search Bar (Desktop - Centered) -->
+                <div class="navbar-search-container d-none d-lg-block">
+                    <form class="search-form" action="/search" method="GET">
+                        <input type="text" class="search-input" name="q" placeholder="Cari layanan, pengaduan, berita..." autocomplete="off">
+                        <button type="submit" class="search-btn">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
                 </div>
-            </nav>
+
+                <!-- Right Side - User Profile / Auth Buttons -->
+                <div class="navbar-profile ms-auto">
+                    <?php if (session()->has('user')): ?>
+                        <!-- Admin/Petugas Profile -->
+                        <div class="dropdown">
+                            <a class="user-profile-btn dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzNiAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTgiIGN5PSIxOCIgcj0iMTgiIGZpbGw9IiNFNUU3RUIiLz4KPGNpcmNsZSBjeD0iMTgiIGN5PSI5IiByPSI2IiBmaWxsPSIjOUI5QkE0Ii8+CjxwYXRoIGQ9Ik0wIDI0aDM2djEySDB2LTEyWiIgZmlsbD0iIzlCOUI5NCIvPgo8L3N2Zz4K" alt="Avatar" class="user-avatar">
+                                <div class="user-info d-none d-lg-block">
+                                    <strong><?= session('user')['nama'] ?></strong>
+                                    <small>Administrator</small>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="/dashboard">
+                                    <i class="bi bi-speedometer2"></i> Dashboard Admin
+                                </a>
+                                <a class="dropdown-item" href="/admin/berita">
+                                    <i class="bi bi-newspaper"></i> Manajemen Berita
+                                </a>
+                                <a class="dropdown-item" href="/admin/notifikasi">
+                                    <i class="bi bi-bell"></i> Manajemen Notifikasi
+                                </a>
+                                <a class="dropdown-item" href="/admin/laporan">
+                                    <i class="bi bi-graph-up"></i> Laporan & Analitik
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="/logout">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+
+                    <?php elseif (session()->has('warga')): ?>
+                        <!-- Warga Profile -->
+                        <div class="dropdown">
+                            <a class="user-profile-btn dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzNiAzNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTgiIGN5PSIxOCIgcj0iMTgiIGZpbGw9IiNGM0Y0RjYiLz4KPGNpcmNsZSBjeD0iMTgiIGN5PSI5IiByPSI2IiBmaWxsPSIjQ0RDQ0RBIi8+CjxwYXRoIGQ9Ik0wIDI0aDM2djEySDB2LTEyWiIgZmlsbD0iIzlCOUI5NCIvPgo8L3N2Zz4K" alt="Avatar" class="user-avatar">
+                                <div class="user-info d-none d-lg-block">
+                                    <strong><?= session('warga')['nama_lengkap'] ?></strong>
+                                    <small>Warga</small>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="/pengaduan">
+                                    <i class="bi bi-exclamation-triangle"></i> Pengaduan Saya
+                                </a>
+                                <a class="dropdown-item" href="/permohonan">
+                                    <i class="bi bi-file-earmark-text"></i> Permohonan Saya
+                                </a>
+                                <a class="dropdown-item" href="/notifikasi">
+                                    <i class="bi bi-bell"></i> Notifikasi
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/profile">
+                                    <i class="bi bi-person-gear"></i> Pengaturan Profil
+                                </a>
+                                <a class="dropdown-item" href="/profile?tab=password">
+                                    <i class="bi bi-shield-lock"></i> Ubah Kata Sandi
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="/logout">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+
+                    <?php else: ?>
+                        <!-- Guest Authentication -->
+                        <div class="guest-actions">
+                            <a href="/login" class="btn-login">
+                                <i class="bi bi-box-arrow-in-right d-lg-none me-1"></i>
+                                <span class="d-none d-lg-inline">Masuk</span>
+                                <span class="d-lg-none">Login</span>
+                            </a>
+                            <a href="/register" class="btn-register">
+                                <i class="bi bi-person-plus d-lg-none me-1"></i>
+                                <span class="d-none d-lg-inline">Daftar</span>
+                                <span class="d-lg-none">Register</span>
+                            </a>
+                            <a href="/admin/login" class="btn-admin">
+                                <i class="bi bi-shield-lock d-lg-none me-1"></i>
+                                <span class="d-none d-lg-inline">Admin</span>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="d-lg-none w-100 mt-3 px-3">
+                <form class="search-form" action="/search" method="GET">
+                    <input type="text" class="search-input" name="q" placeholder="Cari layanan, pengaduan, berita..." autocomplete="off">
+                    <button type="submit" class="search-btn">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
+    </nav>
 
 
 	<!-- Main Content -->
@@ -397,11 +470,25 @@
             // Add animated form inputs
             $('.form-control').addClass('form-control-animated');
 
-            // Search form enhancement for header-blue navbar
-            $('.search-field').on('focus', function() {
-                $(this).addClass('focused');
+            // Navbar scroll effect for modern navbar
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('.modern-navbar').addClass('scrolled');
+                } else {
+                    $('.modern-navbar').removeClass('scrolled');
+                }
+            });
+
+            // Search form enhancement
+            $('.search-input').on('focus', function() {
+                $(this).parent().addClass('focused');
             }).on('blur', function() {
-                $(this).removeClass('focused');
+                $(this).parent().removeClass('focused');
+            });
+
+            // Mobile menu enhancement
+            $('.navbar-toggler').on('click', function() {
+                $('.modern-navbar').toggleClass('menu-open');
             });
 
             // Dropdown hover effects for desktop
