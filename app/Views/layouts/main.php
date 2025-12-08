@@ -1,10 +1,89 @@
+<?php
+/**
+ * =======================================================================
+ * MAIN LAYOUT TEMPLATE - Sistem Pelayanan Masyarakat Kembangan Raya
+ * =======================================================================
+ *
+ * File template utama yang digunakan oleh seluruh halaman dalam sistem.
+ * Template ini menyediakan struktur HTML, CSS, dan JavaScript yang konsisten
+ * untuk semua halaman aplikasi.
+ *
+ * FITUR UTAMA:
+ * ✅ Responsive design dengan Bootstrap 4
+ * ✅ Header dengan navbar yang dinamis berdasarkan role user
+ * ✅ Footer dengan informasi kontak
+ * ✅ Sistem animasi dan interaktivitas
+ * ✅ SEO-friendly meta tags
+ * ✅ Multi-role user interface (admin, warga, guest)
+ *
+ * STRUKTUR FILE:
+ * - DOCTYPE dan HTML head dengan meta tags
+ * - Header dengan navbar dan branding
+ * - Main content area dengan dynamic sections
+ * - Footer dengan informasi kontak
+ * - JavaScript untuk interaktivitas
+ *
+ * VARIABLES YANG DIGUNAKAN:
+ * - $title: Judul halaman untuk browser tab (optional)
+ * - section('content'): Konten utama halaman
+ * - section('scripts'): JavaScript tambahan per halaman (optional)
+ *
+ * DEPENDENCIES:
+ * - Bootstrap 4 CSS/JS
+ * - Font Awesome icons
+ * - Bootstrap Icons
+ * - jQuery 3.2.1
+ * - Custom CSS (navbar.css, enhanced.css)
+ * - Custom JS (animations.js)
+ *
+ * RESPONSIVE BREAKPOINTS:
+ * - Mobile: < 768px
+ * - Tablet: 768px - 991px
+ * - Desktop: > 991px
+ *
+ * SECURITY FEATURES:
+ * - CSRF protection aktif
+ * - XSS prevention dengan output encoding
+ * - Session-based authentication
+ * - Role-based UI rendering
+ *
+ * PERFORMANCE OPTIMIZATIONS:
+ * - Lazy loading untuk images
+ * - Minified CSS/JS assets
+ * - CDN untuk external libraries
+ * - Efficient DOM manipulation
+ *
+ * @author Rizki Ramadhani
+ * @version 2.1.0
+ * @since 2025-12-06
+ * @last_modified 2025-12-08
+ */
+
+// =======================================================================
+// HTML DOCUMENT STRUCTURE - Struktur Dokumen HTML5
+// =======================================================================
+?>
 <!DOCTYPE html>
+<!-- HTML5 doctype untuk standard web modern -->
 <html lang="id">
+<!-- Language attribute untuk SEO dan accessibility (Bahasa Indonesia) -->
+
 <head>
+	<!-- =======================================================================
+	HEAD SECTION - Meta tags, title, dan asset loading
+	======================================================================= -->
+
+	<!-- Character encoding untuk mendukung karakter Indonesia -->
 	<meta charset="UTF-8">
+
+	<!-- Viewport untuk responsive design di mobile devices -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- SEO Meta Tags untuk search engine optimization -->
 	<meta name="description" content="Sistem Pelayanan Masyarakat Kembangan Raya - Portal Berita dan Pengaduan Online">
 	<meta name="keywords" content="kembangan raya, pengaduan masyarakat, pelayanan publik, berita">
+
+	<!-- Dynamic page title dengan fallback default -->
 	<title><?= $title ?? 'Sistem Pelayanan Masyarakat Kembangan Raya' ?></title>
 
 	<!-- Favicon -->
