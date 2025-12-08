@@ -317,6 +317,132 @@
 		::-webkit-scrollbar-thumb:hover {
 			background: #555;
 		}
+
+		/* Enhanced Brand Logo Styles - More Prominent & Visible */
+		.enhanced-brand {
+			position: relative;
+			z-index: 10;
+			transition: all 0.3s ease;
+			padding: 0.5rem 1rem !important;
+			border-radius: 15px;
+			background: rgba(255, 255, 255, 0.1) !important;
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		.enhanced-brand:hover {
+			background: rgba(255, 255, 255, 0.2) !important;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+		}
+
+		.brand-container {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		.brand-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 45px;
+			height: 45px;
+			background: linear-gradient(135deg, #ffffff, #f8f9fa);
+			border-radius: 12px;
+			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
+		}
+
+		.brand-icon i {
+			font-size: 1.8rem;
+			color: #172a74;
+			transition: all 0.3s ease;
+		}
+
+		.enhanced-brand:hover .brand-icon {
+			transform: scale(1.1);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+		}
+
+		.enhanced-brand:hover .brand-icon i {
+			color: #21a9af;
+		}
+
+		.brand-text {
+			display: flex;
+			flex-direction: column;
+			line-height: 1.2;
+		}
+
+		.brand-main {
+			font-size: 1.3rem;
+			font-weight: 700;
+			color: #ffffff;
+			text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+			transition: all 0.3s ease;
+		}
+
+		.brand-subtitle {
+			font-size: 0.75rem;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.8);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			transition: all 0.3s ease;
+		}
+
+		.enhanced-brand:hover .brand-main {
+			color: #ffffff;
+			text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+		}
+
+		.enhanced-brand:hover .brand-subtitle {
+			color: rgba(255, 255, 255, 0.9);
+		}
+
+		/* Mobile Responsive Brand */
+		@media (max-width: 767px) {
+			.enhanced-brand {
+				padding: 0.4rem 0.8rem !important;
+			}
+
+			.brand-container {
+				gap: 0.5rem;
+			}
+
+			.brand-icon {
+				width: 35px;
+				height: 35px;
+			}
+
+			.brand-icon i {
+				font-size: 1.4rem;
+			}
+
+			.brand-main {
+				font-size: 1.1rem;
+			}
+
+			.brand-subtitle {
+				font-size: 0.65rem;
+			}
+		}
+
+		/* Animation for brand logo */
+		@keyframes brandGlow {
+			0%, 100% {
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			}
+			50% {
+				box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+			}
+		}
+
+		.enhanced-brand {
+			animation: brandGlow 3s ease-in-out infinite;
+		}
 	</style>
 </head>
 <body>
@@ -325,10 +451,17 @@
             <nav class="navbar navbar-dark navbar-expand-lg navigation-clean-search">
                 <div class="container">
 
-            <!-- Brand Logo -->
-            <a class="navbar-brand" href="/">
-                <i class="bi bi-building-fill"></i>
-                <span>Kembangan Raya</span>
+            <!-- Brand Logo - Enhanced & More Prominent -->
+            <a class="navbar-brand enhanced-brand" href="/">
+                <div class="brand-container">
+                    <div class="brand-icon">
+                        <i class="bi bi-building-fill"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-main">Kembangan Raya</span>
+                        <span class="brand-subtitle">Pemerintah Daerah</span>
+                    </div>
+                </div>
             </a>
 
             <!-- Mobile Toggler -->
