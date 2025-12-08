@@ -127,14 +127,22 @@ class BeritaController extends BaseController
             return redirect()->to('/admin/login')->with('error', 'Silakan login terlebih dahulu');
         }
 
-        // Validation rules
+        // Check if image file is uploaded
+        $file = $this->request->getFile('gambar');
+        $hasImage = $file && $file->isValid();
+
+        // Validation rules - make image optional for now, we'll check it after
         $rules = [
             'judul' => 'required|min_length[5]|max_length[255]',
             'isi' => 'required|min_length[50]',
             'excerpt' => 'permit_empty|max_length[300]',
-            'status' => 'required|in_list[draft,published]',
-            'gambar' => 'uploaded[gambar]|max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png,image/webp]'
+            'status' => 'required|in_list[draft,published]'
         ];
+
+        // Add image validation only if file is uploaded
+        if ($hasImage) {
+            $rules['gambar'] = 'uploaded[gambar]|max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png,image/webp]';
+        }
 
         $messages = [
             'judul' => [
@@ -162,6 +170,13 @@ class BeritaController extends BaseController
             return redirect()->back()
                 ->withInput()
                 ->with('errors', $this->validator->getErrors());
+        }
+
+        // Check if image is provided (required for new berita)
+        if (!$hasImage) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gambar berita harus dipilih');
         }
 
         // Generate slug dari judul

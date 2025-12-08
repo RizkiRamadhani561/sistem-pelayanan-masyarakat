@@ -727,10 +727,13 @@
                     }
                 });
 
-                // Check if image is provided for new berita
-                if ('<?= $mode ?>' === 'create' && !selectedImage) {
-                    alert('Harap pilih gambar untuk berita');
-                    isValid = false;
+                // For create mode, check if image file is selected
+                if ('<?= $mode ?>' === 'create') {
+                    const fileInput = $('#gambar')[0];
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        alert('Harap pilih gambar untuk berita');
+                        isValid = false;
+                    }
                 }
 
                 if (!isValid) {
@@ -748,6 +751,9 @@
                         value: '1'
                     }).appendTo($(this));
                 }
+
+                // Allow form to submit normally
+                return true;
             });
 
             // Remove validation styling on input
