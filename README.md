@@ -307,6 +307,65 @@ php spark serve
 # Atau setup virtual host di Apache/Nginx
 ```
 
+### **🚀 Deployment ke Netlify:**
+
+#### **Persiapan Repository:**
+1. Pastikan semua perubahan sudah di-commit ke GitHub
+2. Repository harus public atau private dengan akses Netlify
+
+#### **Konfigurasi Netlify:**
+1. **Login ke Netlify**: Kunjungi [netlify.com](https://netlify.com) dan login
+2. **Import Project**: Klik "New site from Git" → "Deploy with GitHub"
+3. **Connect Repository**: Pilih repository GitHub Anda
+4. **Build Settings**:
+   - **Build command**: `composer install && npm install`
+   - **Publish directory**: `public`
+   - **Environment variables**: 
+     - `PHP_VERSION`: `8.1`
+     - Database environment variables (jika diperlukan)
+
+#### **Environment Variables untuk Production:**
+```env
+# Database Configuration
+database.default.hostname = your-netlify-db-host
+database.default.database = your-netlify-db-name
+database.default.username = your-netlify-db-user
+database.default.password = your-netlify-db-password
+database.default.DBDriver = MySQLi
+
+# App Configuration
+app.baseURL = 'https://your-netlify-site.netlify.app'
+app.indexPage = ''
+app.key = 'your-generated-key-here'
+app.environment = 'production'
+
+# Email Configuration (gunakan layanan seperti SendGrid)
+SMTP.host = smtp.sendgrid.net
+SMTP.user = apikey
+SMTP.pass = your-sendgrid-api-key
+SMTP.port = 587
+SMTP.crypto = tls
+```
+
+#### **Post-Deployment Setup:**
+1. **Setup Database**: Buat database MySQL di penyedia seperti PlanetScale atau Railway
+2. **Environment Variables**: Set semua variabel environment di Netlify dashboard
+3. **Database Migration**: Jalankan migration melalui build hook atau manual
+4. **File Permissions**: Pastikan folder `writable` dan `public/uploads` writable
+5. **Domain Setup**: Configure custom domain jika diperlukan
+
+#### **Netlify Build Hooks (Opsional):**
+Untuk automated deployment setelah database changes:
+- Buat build hook di Netlify
+- Trigger hook setelah migration atau seeder updates
+
+#### **Troubleshooting Netlify Deployment:**
+- **Build Failures**: Check build logs untuk error messages
+- **PHP Version**: Pastikan PHP 8.1+ di build settings
+- **Dependencies**: Pastikan composer.json dan package.json lengkap
+- **Environment**: Set semua required environment variables
+- **Database**: Test database connection di production
+
 ### **🔧 Konfigurasi Environment (.env):**
 ```env
 # Database Configuration
