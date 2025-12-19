@@ -5,7 +5,4 @@
 [build.environment]
   PHP_VERSION = "8.2"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.php"
-  status = 200
+# Note: Netlify has limited PHP support. Consider using Railway or DigitalOcean for full PHP apps
