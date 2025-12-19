@@ -74,9 +74,9 @@
 
     <p>
         <?php if (ENVIRONMENT !== 'production') : ?>
-            <?= nl2br(esc($message)) ?>
+            <?= nl2br(string: esc(data: $message)) ?>
         <?php else : ?>
-            <?= lang('Errors.sorryBadRequest') ?>
+            <?= lang(line: 'Errors.sorryBadRequest') ?>
         <?php endif; ?>
     </p>
 </div>

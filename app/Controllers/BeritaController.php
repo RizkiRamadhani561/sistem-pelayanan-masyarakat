@@ -8,78 +8,43 @@ use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * =======================================================================
- * CONTROLLER BERITA - Manajemen Artikel & Berita Sistem
- * =======================================================================
+ * Controller untuk mengelola berita dan artikel
  *
- * Controller ini bertanggung jawab untuk mengelola seluruh lifecycle berita/artikel
- * dalam Sistem Pelayanan Masyarakat Kembangan Raya.
+ * Controller ini menangani semua operasi terkait berita dalam sistem,
+ * mulai dari membuat berita baru hingga menampilkan ke publik.
+ * Dilengkapi dengan fitur upload gambar, manajemen status,
+ * dan optimasi untuk performa yang baik.
  *
- * FUNGSI UTAMA:
- * - ✅ CRUD Lengkap (Create, Read, Update, Delete) untuk berita
- * - ✅ Upload & manajemen gambar berita dengan validasi keamanan
- * - ✅ SEO-friendly URL dengan slug generation otomatis
- * - ✅ Status management (Draft/Published) untuk workflow editorial
- * - ✅ View counter untuk analytics engagement
- * - ✅ Role-based access control (Admin only untuk management)
- *
- * FITUR KHUSUS:
- * - ✅ Image upload dengan MIME validation dan size limits
- * - ✅ Slug unik generation untuk menghindari konflik URL
- * - ✅ Automatic excerpt generation dari konten
- * - ✅ Soft delete dengan cleanup file gambar
- * - ✅ Real-time view tracking untuk statistik
- *
- * SECURITY FEATURES:
- * - ✅ CSRF protection pada semua form submissions
- * - ✅ File upload validation (type, size, malware check)
- * - ✅ Input sanitization dan XSS prevention
- * - ✅ Role-based authorization untuk admin actions
- *
- * PERFORMANCE OPTIMIZATIONS:
- * - ✅ Efficient database queries dengan proper indexing
- * - ✅ Image optimization dan caching
- * - ✅ Lazy loading untuk content berat
- * - ✅ Database connection pooling
+ * Fitur utama:
+ * - CRUD lengkap untuk berita (tambah, edit, hapus, lihat)
+ * - Upload gambar dengan validasi keamanan
+ * - Pembuatan URL SEO-friendly dengan slug otomatis
+ * - Manajemen status draft/published
+ * - Pencatatan jumlah pembaca untuk analisis
+ * - Kontrol akses berdasarkan role (admin saja untuk manajemen)
  *
  * @author Rizki Ramadhani
  * @version 1.0.0
- * @since 2025-12-06
+ * @since 12-12-2025
  */
 class BeritaController extends BaseController
 {
     /**
-     * Property untuk model Berita
-     * Menggunakan dependency injection untuk database operations
+     * Instance model Berita untuk operasi database
      *
-     * @var BeritaModel $beritaModel Instance model untuk operasi berita
+     * @var BeritaModel
      */
     protected $beritaModel;
 
     /**
-     * Property untuk model User
-     * Digunakan untuk mendapatkan data penulis berita
+     * Instance model User untuk data penulis
      *
-     * @var UserModel $userModel Instance model untuk data user/admin
+     * @var UserModel
      */
     protected $userModel;
 
     /**
-     * =======================================================================
-     * KONSTRUKTOR - Inisialisasi Dependencies
-     * =======================================================================
-     *
-     * Method ini dipanggil otomatis saat controller di-instantiate.
-     * Bertugas untuk menginisialisasi semua dependencies yang diperlukan.
-     *
-     * DEPENDENCIES:
-     * - BeritaModel: Untuk CRUD operations pada tabel berita
-     * - UserModel: Untuk mendapatkan data penulis/penulis berita
-     *
-     * WORKFLOW:
-     * 1. Inisialisasi BeritaModel untuk operasi database berita
-     * 2. Inisialisasi UserModel untuk data penulis
-     * 3. Setup lengkap untuk semua method dalam controller
+     * Konstruktor - menginisialisasi model yang diperlukan
      *
      * @return void
      */
@@ -93,40 +58,10 @@ class BeritaController extends BaseController
     }
 
     /**
-     * =======================================================================
-     * METHOD INDEX - Halaman Manajemen Berita Admin
-     * =======================================================================
+     * Halaman manajemen berita untuk admin
      *
-     * Menampilkan halaman utama manajemen berita untuk admin/petugas.
-     * Berisi daftar semua berita dengan fitur pagination, filter, dan search.
-     *
-     * HTTP METHOD: GET
-     * ROUTE: /admin/berita
-     * ACCESS: Admin/Petugas yang sudah login
-     *
-     * FEATURES:
-     * - ✅ Pagination dengan customizable per page
-     * - ✅ Filter berdasarkan status (draft/published/all)
-     * - ✅ Search functionality di judul, isi, dan excerpt
-     * - ✅ Sort by creation date (terbaru dulu)
-     * - ✅ Join dengan tabel users untuk data penulis
-     *
-     * SECURITY CHECKS:
-     * - ✅ Session validation untuk admin/petugas
-     * - ✅ Redirect ke login jika belum authenticated
-     *
-     * DATABASE QUERIES:
-     * 1. SELECT * FROM berita WHERE [filters] ORDER BY created_at DESC LIMIT [offset], [perPage]
-     * 2. SELECT COUNT(*) FROM berita WHERE [filters] (untuk pagination)
-     * 3. SELECT * FROM users WHERE id_user = [penulis_id] (untuk setiap berita)
-     *
-     * PARAMETERS:
-     * - per_page (GET): Jumlah item per halaman (default: 10)
-     * - status (GET): Filter status berita (draft/published/all)
-     * - search (GET): Kata kunci pencarian
-     *
-     * RESPONSE:
-     * - View: admin/berita/index dengan data berita, pagination, filters
+     * Menampilkan daftar berita dengan fitur filter, pencarian, dan pagination.
+     * Hanya bisa diakses oleh admin/petugas yang sudah login.
      *
      * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\View\View
      */
@@ -217,34 +152,10 @@ class BeritaController extends BaseController
     }
 
     /**
-     * =======================================================================
-     * METHOD CREATE - Form Tambah Berita Baru
-     * =======================================================================
+     * Form tambah berita baru
      *
      * Menampilkan halaman form untuk membuat berita baru.
-     * Form ini akan digunakan admin/petugas untuk menambahkan artikel berita.
-     *
-     * HTTP METHOD: GET
-     * ROUTE: /admin/berita/create
-     * ACCESS: Admin/Petugas yang sudah login
-     *
-     * FEATURES:
-     * - ✅ Form dengan rich text editor untuk konten berita
-     * - ✅ Drag & drop image upload dengan preview
-     * - ✅ Auto-generate excerpt dari konten
-     * - ✅ Slug preview untuk SEO
-     * - ✅ Status selection (Draft/Published)
-     *
-     * SECURITY CHECKS:
-     * - ✅ Session validation untuk admin/petugas
-     * - ✅ Redirect ke login jika belum authenticated
-     *
-     * VIEW DATA:
-     * - title: Page title untuk browser tab
-     * - mode: 'create' untuk menentukan mode form
-     *
-     * RESPONSE:
-     * - View: admin/berita/form dengan mode create
+     * Hanya bisa diakses oleh admin/petugas yang sudah login.
      *
      * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\View\View
      */

@@ -11,11 +11,240 @@ use CodeIgniter\Router\RouteCollection;
  * Menentukan mapping antara URL endpoints dengan Controller methods.
  *
  * ROUTING PRINCIPLES:
- * - ✅ RESTful URL patterns untuk CRUD operations
- * - ✅ Hierarchical URL structure (admin/, api/, etc.)
- * - ✅ Parameter binding dengan placeholders (:num, :segment)
- * - ✅ HTTP method specificity (GET, POST, PUT, DELETE)
- * - ✅ Security-aware routing (admin routes separated)
+ * - RESTful URL patterns untuk CRUD operations
+ * - Hierarchical URL structure (admin/, api/, etc.)
+ * - Parameter binding dengan placeholders (:num, :segment)
+ * - HTTP method specificity (GET, POST, PUT, DELETE)
+ * - Security-aware routing (admin routes separated)
+ *
+ * =======================================================================
+ * ROUTE PLACEHOLDERS - PENJELASAN LENGKAP DAN DETAIL
+ * =======================================================================
+ *
+ * CodeIgniter 4 menggunakan sistem placeholders untuk menangani parameter dinamis
+ * dalam URL routing. Placeholders ini secara otomatis dikonversi ke regular expressions.
+ *
+ * ================================ :num PLACEHOLDER ================================
+ *
+ * DEFINISI DETAIL:
+ * :num adalah placeholder yang MATCH dengan satu atau lebih karakter digit (0-9).
+ * Ini adalah placeholder PALING AMAN untuk data numerik karena hanya menerima angka.
+ *
+ * TEKNIS:
+ * - REGEX EQUIVALENT: ([0-9]+)
+ * - MINIMUM LENGTH: 1 karakter (tidak boleh kosong)
+ * - MAXIMUM LENGTH: Tidak terbatas (teori), tapi praktis terbatas oleh URL limits
+ * - CHARACTER SET: Hanya 0-9 (tidak ada huruf, simbol, atau spasi)
+ *
+ * CONTOH YANG COCOK (VALID):
+ * /users/123          → $1 = "123"
+ * /pengaduan/1        → $1 = "1"
+ * /wargas/999999      → $1 = "999999"
+ * /layanan/42         → $1 = "42"
+ *
+ * CONTOH YANG TIDAK COCOK (INVALID - akan return 404):
+ * /users/abc          → bukan angka
+ * /users/123abc       → mengandung huruf
+ * /users/12 3         → ada spasi
+ * /users/12.34        → ada titik desimal
+ * /users/-123         → ada tanda minus
+ * /users/             → kosong setelah slash
+ *
+ * KEGUNAAN DALAM SISTEM INI:
+ * 1. USER MANAGEMENT: /users/(:num) → UserController::show($id)
+ * 2. WARGA MANAGEMENT: /wargas/(:num) → WargaController::show($id)
+ * 3. PENGADUAN: /pengaduan/(:num) → PengaduanController::show($id)
+ * 4. LAYANAN: /layanan/(:num) → JenisLayananController::show($id)
+ * 5. DASHBOARD WARGA: /dashboard/warga/(:num) → DashboardController::showWarga($id)
+ * 6. BERITA ADMIN: /admin/berita/(:num)/edit → BeritaController::edit($id)
+ * 7. NOTIFIKASI: /admin/notifikasi/(:num)/delete → NotifikasiController::delete($id)
+ *
+ * IMPLEMENTASI DI CONTROLLER:
+ * public function show($id)
+ * {
+ *     // $id sudah terjamin numerik karena :num placeholder
+ *     $user = $this->userModel->find($id);
+ *     if (!$user) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *     return view('user/show', ['user' => $user]);
+ * }
+ *
+ * KEAMANAN (SECURITY):
+ * INPUT VALIDATION: Otomatis memfilter hanya angka
+ * SQL INJECTION: Tidak mungkin karena hanya numerik
+ * XSS PROTECTION: Numerik tidak mengandung script
+ * DIRECTORY TRAVERSAL: Tidak bisa akses ../ atau path traversal
+ * ZERO TRUST: Tetap perlu validasi eksistensi data di database
+ *
+ * KESALAHAN UMUM :
+ * Menggunakan :segment untuk ID → Berbahaya, bisa inject string
+ * Tidak validasi di controller → Meski :num aman, tetap cek eksistensi
+ * Menggunakan :any untuk ID → Sangat berbahaya, bisa path traversal
+ *
+ * ================================ :segment PLACEHOLDER ================================
+ *
+ * DEFINISI DETAIL:
+ * :segment adalah placeholder yang MATCH dengan semua karakter KECUALI slash (/).
+ * Digunakan untuk string identifier seperti slug, nama, atau kode alfanumerik.
+ *
+ * TEKNIS:
+ * - REGEX EQUIVALENT: ([^/]+)
+ * - MINIMUM LENGTH: 1 karakter
+ * - MAXIMUM LENGTH: Tidak terbatas hingga URL limit
+ * - CHARACTER SET: Semua karakter KECUALI forward slash (/)
+ * - CASE SENSITIVE: Ya, membedakan huruf besar-kecil
+ *
+ * CONTOH YANG COCOK:
+ * /berita/judul-artikel-2024    → $1 = "judul-artikel-2024"
+ * /berita/pengumuman-penting    → $1 = "pengumuman-penting"
+ * /berita/berita-123            → $1 = "berita-123"
+ * /search/query+pencarian       → $1 = "query+pencarian"
+ *
+ * CONTOH YANG TIDAK COCOK:
+ * /berita/judul/artikel         → ada slash, akan dipecah jadi 2 segment
+ * /berita/                      → kosong setelah slash
+ *
+ * KEGUNAAN DALAM SISTEM INI:
+ * 1. BERITA SLUG: /berita/(:segment) → BeritaController::show($slug)
+ * 2. EXPORT LAPORAN: /admin/laporan/export/(:segment)/(:segment) → LaporanController::export($type, $format)
+ *
+ * IMPLEMENTASI DI CONTROLLER:
+ * public function show($slug)
+ * {
+ *     // $slug bisa berisi apa saja kecuali slash
+ *     // PERLU VALIDASI MANUAL untuk keamanan
+ *     $berita = $this->beritaModel->where('slug', $slug)->first();
+ *     if (!$berita) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *     return view('berita/show', ['berita' => $berita]);
+ * }
+ *
+ * VALIDASI YANG DIPERLUKAN:
+ * - Escape SQL injection
+ * - Sanitize XSS
+ * - Validasi panjang string
+ * - Validasi format (jika diperlukan)
+ *
+ * ================================ :any PLACEHOLDER ================================
+ *
+ * DEFINISI DETAIL:
+ * :any adalah placeholder yang MATCH dengan semua karakter TERMASUK slash (/).
+ * Placeholder ini SANGAT BERBAHAYA dan jarang digunakan.
+ *
+ * TEKNIS:
+ * - REGEX EQUIVALENT: (.+)
+ * - MINIMUM LENGTH: 1 karakter
+ * - CHARACTER SET: Semua karakter termasuk slash
+ * - RISK LEVEL: TINGGI - gunakan hanya untuk path file terkontrol
+ *
+ * CONTOH PENGGUNAAN (JARANG):
+ * /files/path/to/document.pdf    → $1 = "path/to/document.pdf"
+ * /download/folder/subfolder/file.zip → $1 = "folder/subfolder/file.zip"
+ *
+ * KEGUNAAN DALAM SISTEM INI:
+ * - TIDAK DIGUNAKAN dalam sistem ini (karena berbahaya)
+ * - Jika perlu, gunakan untuk file download dengan validasi ketat
+ *
+ * ================================ PARAMETER PASSING ================================
+ *
+ * Cara CodeIgniter melewatkan parameter ke controller:
+ *
+ * SINTAKS ROUTE: 'ControllerName::methodName/$1/$2/$3...'
+ * - $1 = Parameter pertama (dari placeholder pertama)
+ * - $2 = Parameter kedua (dari placeholder kedua)
+ * - dst...
+ *
+ * CONTOH REAL DARI FILE INI:
+ * $routes->get('/users/(:num)', 'UserController::show/$1');
+ * URL: /users/123
+ * RESULT: UserController::show(123)
+ *
+ * $routes->get('/users/(:num)/edit', 'UserController::edit/$1');
+ * URL: /users/123/edit
+ * RESULT: UserController::edit(123)
+ *
+ * $routes->get('/admin/laporan/export/(:segment)/(:segment)', 'LaporanController::export/$1/$2');
+ * URL: /admin/laporan/export/pengaduan/pdf
+ * RESULT: LaporanController::export('pengaduan', 'pdf')
+ *
+ * ================================ BEST PRACTICES ================================
+ *
+ * 1. SECURITY FIRST:
+ *    - Selalu gunakan :num untuk database ID
+ *    - Gunakan :segment dengan validasi ketat
+ *    - Hindari :any kecuali benar-benar diperlukan
+ *    - Validasi semua parameter di controller
+ *
+ * 2. PERFORMANCE:
+ *    - :num lebih cepat diproses karena regex sederhana
+ *    - :segment sedikit lebih lambat karena lebih kompleks
+ *    - :any paling lambat dan berbahaya
+ *
+ * 3. NAMING CONVENTIONS:
+ *    - ID fields: selalu (:num)
+ *    - Slugs: (:segment) dengan URL-friendly format
+ *    - Status codes: (:segment) dengan enum validation
+ *    - File paths: hindari (:any), gunakan validasi ketat
+ *
+ * 4. ERROR HANDLING:
+ *    - Selalu cek eksistensi data di database
+ *    - Return 404 jika data tidak ditemukan
+ *    - Log invalid parameter attempts
+ *
+ * 5. MIGRATION FROM OTHER FRAMEWORKS:
+ *    - Laravel: {id} → (:num), {slug} → (:segment)
+ *    - Express.js: :id → (:num), :slug → (:segment)
+ *    - Django: <int:id> → (:num), <slug:slug> → (:segment)
+ *
+ * ================================ VALIDATION EXAMPLES ================================
+ *
+ * Di Controller, selalu validasi meski menggunakan :num:
+ *
+ * public function show($id)
+ * {
+ *     // Validasi numerik (redundant tapi aman)
+ *     if (!is_numeric($id)) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *
+ *     // Validasi range
+ *     if ($id < 1 || $id > 999999) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *
+ *     // Cek eksistensi di database
+ *     $user = $this->userModel->find($id);
+ *     if (!$user) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *
+ *     return view('user/show', ['user' => $user]);
+ * }
+ *
+ * Untuk :segment, validasi lebih ketat:
+ *
+ * public function show($slug)
+ * {
+ *     // Validasi format slug (hanya alphanumeric, dash, underscore)
+ *     if (!preg_match('/^[a-zA-Z0-9_-]+$/', $slug)) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *
+ *     // Validasi panjang
+ *     if (strlen($slug) < 3 || strlen($slug) > 100) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *
+ *     // Cek di database
+ *     $berita = $this->beritaModel->where('slug', $slug)->first();
+ *     if (!$berita) {
+ *         throw new \CodeIgniter\Exceptions\PageNotFoundException();
+ *     }
+ *
+ *     return view('berita/show', ['berita' => $berita]);
+ * }
  *
  * URL STRUCTURE:
  * - Public routes: / (tanpa prefix)

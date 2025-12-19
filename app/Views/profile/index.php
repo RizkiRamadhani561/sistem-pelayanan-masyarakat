@@ -7,7 +7,7 @@
     <link href="/assets/bootstrap4/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
     <style>
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -369,7 +369,7 @@
 </head>
 <body>
 
-    <!-- Profile Hero -->
+    <!-- Hero Profil -->
     <section class="profile-hero">
         <div class="container">
             <h1><i class="bi bi-person-circle me-3"></i>Pengaturan Profil</h1>

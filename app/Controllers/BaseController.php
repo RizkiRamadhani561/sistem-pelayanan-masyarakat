@@ -10,36 +10,36 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class BaseController
+ * Kelas BaseController
  *
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
- * Extend this class in any new controllers:
+ * BaseController menyediakan tempat yang praktis untuk memuat komponen
+ * dan menjalankan fungsi yang dibutuhkan oleh semua controller.
+ * Perluas kelas ini di controller baru:
  *     class Home extends BaseController
  *
- * For security be sure to declare any new methods as protected or private.
+ * Untuk keamanan, pastikan mendeklarasikan method baru sebagai protected atau private.
  */
 abstract class BaseController extends Controller
 {
     /**
-     * Instance of the main Request object.
+     * Instance dari objek Request utama.
      *
      * @var CLIRequest|IncomingRequest
      */
     protected $request;
 
     /**
-     * An array of helpers to be loaded automatically upon
-     * class instantiation. These helpers will be available
-     * to all other controllers that extend BaseController.
+     * Array helper yang akan dimuat otomatis saat
+     * instansiasi kelas. Helper ini akan tersedia
+     * untuk semua controller yang mewarisi BaseController.
      *
      * @var list<string>
      */
     protected $helpers = [];
 
     /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
+     * Pastikan mendeklarasikan properti untuk setiap properti dinamis yang diinisialisasi.
+     * Pembuatan properti dinamis sudah tidak direkomendasikan di PHP 8.2.
      */
     // protected $session;
 
@@ -48,11 +48,11 @@ abstract class BaseController extends Controller
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Do Not Edit This Line
+        // Jangan Edit Baris Ini
         parent::initController($request, $response, $logger);
 
-        // Preload any models, libraries, etc, here.
+        // Muat model, library, dll di sini jika diperlukan.
 
-        // E.g.: $this->session = service('session');
+        // Contoh: $this->session = service('session');
     }
 }

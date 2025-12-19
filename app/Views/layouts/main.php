@@ -94,14 +94,14 @@
 	<link rel="stylesheet" href="/assets/bootstrap4/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
-	<!-- Bootstrap Icons -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+	<!-- Bootstrap Icons (Local) -->
+	<link rel="stylesheet" href="/assets/bootstrap-icons/bootstrap-icons.min.css">
 	<!-- Custom CSS -->
 	<link href="/css/navbar.css" rel="stylesheet">
 	<link href="/css/enhanced.css" rel="stylesheet">
 
 	<style>
-		/* Header Blue Navbar Styles - Based on Bootstrap 4 Theme */
+		/* Gaya Navbar Header Biru - Berdasarkan Tema Bootstrap 4 */
 		.header-blue {
 			background: linear-gradient(135deg, #172a74, #21a9af);
 			background-color: #184e8e;
@@ -248,14 +248,14 @@
 			border-bottom: 1px solid #ccc;
 		}
 
-		/* Enhanced card hover effects */
+		/* Efek hover kartu yang ditingkatkan */
 		.card-hover:hover {
 			transform: translateY(-5px);
 			box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 			transition: all 0.3s ease;
 		}
 
-		/* Lazy loading animations */
+		/* Animasi lazy loading */
 		.lazy-img {
 			opacity: 0;
 			transition: opacity 0.3s ease;
@@ -264,12 +264,12 @@
 			opacity: 1;
 		}
 
-		/* Status badges */
+		/* Lencana status */
 		.status-badge {
 			font-size: 0.8em;
 		}
 
-		/* General animations */
+		/* Animasi umum */
 		.fade-in {
 			animation: fadeIn 0.5s ease-in;
 		}
@@ -278,7 +278,7 @@
 			to { opacity: 1; transform: translateY(0); }
 		}
 
-		/* Button hover effects */
+		/* Efek hover tombol */
 		.btn {
 			transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		}
@@ -288,19 +288,19 @@
 			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 		}
 
-		/* Form enhancements */
+		/* Peningkatan form */
 		.form-control:focus {
 			border-color: #007bff;
 			box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 			transform: translateY(-1px);
 		}
 
-		/* Smooth scrolling */
+		/* Scroll halus */
 		html {
 			scroll-behavior: smooth;
 		}
 
-		/* Custom scrollbar */
+		/* Scrollbar kustom */
 		::-webkit-scrollbar {
 			width: 8px;
 		}
@@ -318,7 +318,7 @@
 			background: #555;
 		}
 
-		/* Enhanced Brand Logo Styles - More Prominent & Visible */
+		/* Gaya Logo Brand yang Ditingkatkan - Lebih Menonjol & Terlihat */
 		.enhanced-brand {
 			position: relative;
 			z-index: 10;
@@ -402,7 +402,7 @@
 			color: rgba(255, 255, 255, 0.9);
 		}
 
-		/* Mobile Responsive Brand */
+		/* Brand Responsif Mobile */
 		@media (max-width: 767px) {
 			.enhanced-brand {
 				padding: 0.4rem 0.8rem !important;
@@ -430,7 +430,7 @@
 			}
 		}
 
-		/* Animation for brand logo */
+		/* Animasi untuk logo brand */
 		@keyframes brandGlow {
 			0%, 100% {
 				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -451,7 +451,7 @@
             <nav class="navbar navbar-dark navbar-expand-lg navigation-clean-search">
                 <div class="container">
 
-            <!-- Brand Logo - Enhanced & More Prominent -->
+            <!-- Logo Brand - Ditingkatkan & Lebih Menonjol -->
             <a class="navbar-brand enhanced-brand" href="/">
                 <div class="brand-container">
                     <div class="brand-icon">

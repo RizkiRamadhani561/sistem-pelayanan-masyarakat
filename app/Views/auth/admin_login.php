@@ -147,7 +147,8 @@ document.getElementById('togglePassword').addEventListener('click', function() {
 });
 
 // Form validation
-document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+document.getElementById('adminLoginForm').addEventListener('submit', function(e) 
+{
     const email = document.getElementById('email');
     const password = document.getElementById('password');
 
